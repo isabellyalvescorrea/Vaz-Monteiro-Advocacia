@@ -209,18 +209,49 @@ nav:has(.nav-collapse.is-open)::after{
    6. Hero
    -------------------------------------------------------------------------- */
 .hero{
+  position:relative;
+  overflow:hidden;
   background:var(--wine-dark);
   padding:64px 24px 48px;
   color:var(--cream);
   text-align:center;
 }
-.hero-inner{max-width:640px;margin:0 auto;}
+
+/* Textura decorativa. Mobile: faixa na parte de baixo, com o mask apagando a
+   borda de cima, então a fusão com o fundo sólido é um degradê, nunca uma
+   linha dura. O topo da imagem tem a mesma luminância do fundo (#3F1C1F),
+   por isso o background-position fica sempre no topo. */
+.hero-texture{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:56%;
+  z-index:0;
+  background-image:url('/assets/img/hero-texture.jpg');
+  background-size:cover;
+  background-position:top center;
+  background-repeat:no-repeat;
+  -webkit-mask-image:linear-gradient(to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.16) 30%,
+    rgba(0,0,0,0.52) 58%,
+    rgba(0,0,0,0.85) 80%,
+    #000 100%);
+  mask-image:linear-gradient(to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.16) 30%,
+    rgba(0,0,0,0.52) 58%,
+    rgba(0,0,0,0.85) 80%,
+    #000 100%);
+  pointer-events:none;
+}
+
+.hero-inner{position:relative;z-index:1;max-width:640px;margin:0 auto;}
 .hero-eyebrow{
   font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;
   color:rgba(247,242,234,0.62);margin-bottom:18px;
 }
 .hero h1{font-size:2.1rem;line-height:1.28;font-weight:600;letter-spacing:-0.005em;}
-.hero .accent{color:var(--green-light);}
+.hero .accent{color:var(--green-light);font-style:italic;font-weight:500;}
 .hero p.lede{margin-top:20px;font-size:1.02rem;line-height:1.65;color:rgba(247,242,234,0.82);}
 .hero-ctas{margin-top:32px;display:flex;flex-direction:column;gap:14px;align-items:center;}
 .hero-ctas > a{width:100%;max-width:340px;}
@@ -244,6 +275,38 @@ nav:has(.nav-collapse.is-open)::after{
 .btn-secondary:hover{border-color:var(--cream);background:rgba(247,242,234,0.08);transform:translateY(-2px);}
 .hero-trust{margin-top:26px;font-size:0.82rem;color:rgba(247,242,234,0.58);}
 
+.hero-areas{
+  margin-top:36px;
+  padding-top:24px;
+  border-top:1px solid rgba(247,242,234,0.16);
+}
+.hero-areas-label{
+  font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(247,242,234,0.6);
+  margin-bottom:16px;
+}
+.hero-areas-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  align-items:stretch;
+  gap:12px 18px;
+}
+/* o link ocupa a célula inteira: quando um nome quebra em duas linhas,
+   os sublinhados de todos os itens continuam alinhados na mesma base */
+.hero-areas-grid li{display:flex;}
+.hero-areas-grid a{
+  display:flex;align-items:flex-start;justify-content:center;
+  width:100%;
+  padding-bottom:9px;
+  font-size:0.84rem;font-weight:500;line-height:1.35;
+  color:rgba(247,242,234,0.82);
+  border-bottom:1px solid rgba(247,242,234,0.22);
+  transition:color .2s ease, border-bottom-color .2s ease;
+}
+.hero-areas-grid a:hover,.hero-areas-grid a:focus-visible{
+  color:var(--cream);
+  border-bottom-color:var(--green-light);
+}
+
 /* --------------------------------------------------------------------------
    7. Estrutura comum das seções
    -------------------------------------------------------------------------- */
@@ -262,10 +325,31 @@ section{padding:60px 24px;scroll-margin-top:var(--nav-h);}
   section{padding:84px 56px;}
   .section-head{max-width:52ch;margin-bottom:48px;}
   .section-head h2{font-size:2.1rem;}
-  .hero{padding:96px 56px;}
+  /* o texto recua para a esquerda para abrir espaço ao painel de textura */
+  .hero{padding:96px calc(56px + 41%) 96px 56px;}
   .hero h1{font-size:2.7rem;}
   .hero-ctas{flex-direction:row;justify-content:center;gap:16px;}
   .hero-ctas > a{width:auto;}
+  .hero-areas-grid{grid-template-columns:repeat(4,1fr);gap:10px;}
+
+  /* painel lateral: nítido na borda direita, apagando antes de chegar ao texto */
+  .hero-texture{
+    top:0;bottom:0;right:0;left:auto;
+    width:58%;height:auto;
+    background-position:top right;
+    -webkit-mask-image:linear-gradient(to left,
+      #000 0%,
+      rgba(0,0,0,0.88) 18%,
+      rgba(0,0,0,0.5) 42%,
+      rgba(0,0,0,0.12) 60%,
+      transparent 70%);
+    mask-image:linear-gradient(to left,
+      #000 0%,
+      rgba(0,0,0,0.88) 18%,
+      rgba(0,0,0,0.5) 42%,
+      rgba(0,0,0,0.12) 60%,
+      transparent 70%);
+  }
 }
 
 /* --------------------------------------------------------------------------
