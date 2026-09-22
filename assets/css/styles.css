@@ -240,15 +240,15 @@ nav:has(.nav-collapse.is-open)::after{
   filter:brightness(1.22) contrast(1.16) saturate(1.05);
   -webkit-mask-image:linear-gradient(to bottom,
     transparent 0%,
-    transparent 42.5%,
-    rgba(0,0,0,0.45) 48%,
+    transparent 47%,
+    rgba(0,0,0,0.45) 52%,
     rgba(0,0,0,0.75) 60%,
     rgba(0,0,0,0.93) 82%,
     #000 100%);
   mask-image:linear-gradient(to bottom,
     transparent 0%,
-    transparent 42.5%,
-    rgba(0,0,0,0.45) 48%,
+    transparent 47%,
+    rgba(0,0,0,0.45) 52%,
     rgba(0,0,0,0.75) 60%,
     rgba(0,0,0,0.93) 82%,
     #000 100%);
@@ -256,9 +256,9 @@ nav:has(.nav-collapse.is-open)::after{
 }
 
 .hero-inner{position:relative;z-index:1;width:100%;max-width:640px;margin:0 auto;}
-.hero h1{font-size:2.15rem;line-height:1.14;font-weight:700;}
+.hero h1{font-size:2.45rem;line-height:1.1;font-weight:700;}
 .hero .accent{color:var(--green-light);font-style:italic;font-weight:600;}
-.hero p.lede{margin-top:16px;font-size:0.97rem;line-height:1.58;color:rgba(247,242,234,0.82);}
+.hero p.lede{margin-top:16px;font-size:0.88rem;line-height:1.6;color:rgba(247,242,234,0.82);}
 .hero-ctas{margin-top:28px;display:flex;flex-direction:column;gap:14px;align-items:center;}
 .hero-ctas > a{width:100%;max-width:340px;}
 .btn-primary{
@@ -323,6 +323,7 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
 }
 .section-head h2{font-size:1.9rem;font-weight:700;line-height:1.25;color:var(--ink);}
 .section-head h2 .accent{color:var(--wine);}
+.section-head h2 .accent-green{color:var(--green);}
 .on-white{background:var(--white);}
 .on-cream{background:var(--cream);}
 
@@ -332,8 +333,8 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
   .section-head h2{font-size:2.35rem;}
   /* o texto recua para a esquerda para abrir espaço ao painel de textura */
   .hero{padding:96px calc(56px + 41%) 96px 56px;}
-  .hero h1{font-size:2.8rem;line-height:1.14;}
-  .hero p.lede{margin-top:20px;font-size:1.02rem;line-height:1.62;}
+  .hero h1{font-size:3.4rem;line-height:1.08;}
+  .hero p.lede{margin-top:22px;font-size:0.95rem;line-height:1.62;}
   .hero-ctas{margin-top:30px;}
   .btn-primary{padding:16px 26px;font-size:0.98rem;}
   .hero-trust{margin-top:24px;font-size:0.82rem;}
@@ -399,16 +400,15 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
   display:flex;gap:18px;
   padding:24px 4px;
   border-top:1px solid var(--border);
-  border-left:2px solid transparent;
-  transition:border-left-color .22s ease, padding-left .22s ease, background .22s ease;
+  transition:background .22s ease, padding-left .22s ease;
 }
 .js .commit{
   transition:opacity .6s ease, translate .5s ease,
-             border-left-color .22s ease, padding-left .22s ease, background .22s ease;
+             background .22s ease, padding-left .22s ease;
 }
 .commit:last-child{border-bottom:1px solid var(--border);}
-.commit.is-visible{border-left-color:var(--green);}
-.commit:hover{border-left-color:var(--green);padding-left:14px;background:var(--hover-tint);}
+.commit.is-visible{background:rgba(42,33,29,0.022);}
+.commit:hover{background:rgba(42,33,29,0.055);padding-left:14px;}
 .commit .mark{width:7px;height:7px;border-radius:50%;background:var(--wine);margin-top:9px;flex-shrink:0;}
 .commit h3{font-size:1.18rem;font-weight:700;line-height:1.3;margin-bottom:5px;}
 .commit p{font-size:0.92rem;color:var(--muted);line-height:1.55;max-width:52ch;}
@@ -418,56 +418,52 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
    -------------------------------------------------------------------------- */
 .lawyers-grid{display:flex;flex-direction:column;max-width:900px;margin:0 auto;}
 .lawyer-row{
-  display:flex;flex-direction:column;gap:6px;
-  padding:22px 6px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  text-align:center;
+  padding:24px 6px;
   border-top:1px solid var(--border);
-  border-left:2px solid transparent;
-  transition:border-left-color .22s ease, padding-left .22s ease, background .22s ease;
+  transition:background .22s ease;
 }
 .js .lawyer-row{
-  transition:opacity .6s ease, translate .5s ease,
-             border-left-color .22s ease, padding-left .22s ease, background .22s ease;
+  transition:opacity .6s ease, translate .5s ease, background .22s ease;
 }
 .lawyer-row:last-child{border-bottom:1px solid var(--border);}
-.lawyer-row:hover{border-left-color:var(--wine);padding-left:14px;background:var(--hover-tint);}
+.lawyer-row:hover{background:var(--hover-tint);}
 .lawyer-name{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;letter-spacing:-0.02em;line-height:1.25;}
 .lawyer-oab{font-size:0.78rem;color:var(--muted);margin-top:3px;}
 .lawyer-spec{font-size:0.88rem;color:var(--wine);font-weight:600;}
-
-@container page (min-width:620px){
-  .lawyer-row{flex-direction:row;justify-content:space-between;align-items:flex-start;gap:20px;}
-  .lawyer-spec{text-align:right;max-width:22ch;flex-shrink:0;}
-}
 
 /* --------------------------------------------------------------------------
    11. Como atuamos
    -------------------------------------------------------------------------- */
 .steps{display:flex;flex-direction:column;max-width:900px;margin:0 auto;}
 .step{
-  display:flex;gap:20px;
+  display:block;
   padding:24px 4px;
   border-top:1px solid var(--border);
-  border-left:2px solid transparent;
-  transition:border-left-color .22s ease, padding-left .22s ease, background .22s ease;
+  transition:background .22s ease, padding-left .22s ease;
 }
 .js .step{
   transition:opacity .6s ease, translate .5s ease,
-             border-left-color .22s ease, padding-left .22s ease, background .22s ease;
+             background .22s ease, padding-left .22s ease;
 }
 .step:last-child{border-bottom:1px solid var(--border);}
-.step.is-visible{border-left-color:var(--wine);}
-.step:hover{border-left-color:var(--wine);padding-left:14px;background:var(--hover-tint);}
-.step .n{
-  font-family:var(--font-serif);
-  font-size:1.8rem;line-height:1.05;color:var(--wine);font-weight:700;letter-spacing:-0.02em;
-  flex-shrink:0;width:2ch;
+.step:hover{background:var(--hover-tint);padding-left:14px;}
+
+/* traço no lugar da numeração: cresce de 0 até 36px quando a etapa entra
+   na tela ou recebe o mouse */
+.step::before{
+  content:"";display:block;
+  width:0;height:2px;
+  background:var(--wine);
+  margin-bottom:15px;
+  transition:width .55s ease;
 }
+.step.is-visible::before,.step:hover::before{width:36px;}
+/* sem JS a classe de reveal nunca chega, então o traço já nasce pronto */
+.no-js .step::before{width:36px;}
 .step h3{font-size:1.18rem;font-weight:700;line-height:1.3;margin-bottom:5px;}
 .step p{font-size:0.92rem;color:var(--muted);line-height:1.55;max-width:50ch;}
-
-@container page (min-width:900px){
-  .step .n{font-size:2rem;}
-}
 
 /* --------------------------------------------------------------------------
    12. Formulário qualificador
@@ -594,6 +590,7 @@ footer .oab{margin-top:6px;color:rgba(247,242,234,0.58);}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .js .sr,.js .sr.is-visible{opacity:1;translate:none;}
+  .step::before{width:36px;}
   *,*::before,*::after{
     transition-duration:0.01ms !important;
     transition-delay:0s !important;
