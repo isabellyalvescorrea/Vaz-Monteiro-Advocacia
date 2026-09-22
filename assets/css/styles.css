@@ -240,15 +240,15 @@ nav:has(.nav-collapse.is-open)::after{
   filter:brightness(1.22) contrast(1.16) saturate(1.05);
   -webkit-mask-image:linear-gradient(to bottom,
     transparent 0%,
-    transparent 47%,
-    rgba(0,0,0,0.45) 52%,
+    transparent 36%,
+    rgba(0,0,0,0.45) 42%,
     rgba(0,0,0,0.75) 60%,
     rgba(0,0,0,0.93) 82%,
     #000 100%);
   mask-image:linear-gradient(to bottom,
     transparent 0%,
-    transparent 47%,
-    rgba(0,0,0,0.45) 52%,
+    transparent 36%,
+    rgba(0,0,0,0.45) 42%,
     rgba(0,0,0,0.75) 60%,
     rgba(0,0,0,0.93) 82%,
     #000 100%);
@@ -258,8 +258,7 @@ nav:has(.nav-collapse.is-open)::after{
 .hero-inner{position:relative;z-index:1;width:100%;max-width:640px;margin:0 auto;}
 .hero h1{font-size:2.45rem;line-height:1.1;font-weight:700;}
 .hero .accent{color:var(--green-light);font-style:italic;font-weight:600;}
-.hero p.lede{margin-top:16px;font-size:0.88rem;line-height:1.6;color:rgba(247,242,234,0.82);}
-.hero-ctas{margin-top:28px;display:flex;flex-direction:column;gap:14px;align-items:center;}
+.hero-ctas{margin-top:36px;display:flex;flex-direction:column;gap:14px;align-items:center;}
 .hero-ctas > a{width:100%;max-width:340px;}
 .btn-primary{
   display:block;text-align:center;
@@ -282,17 +281,17 @@ nav:has(.nav-collapse.is-open)::after{
 .hero-trust{margin-top:18px;font-size:0.78rem;line-height:1.5;color:rgba(247,242,234,0.58);}
 
 .hero-areas{
-  margin-top:26px;
+  margin-top:44px;
 }
 .hero-areas-label{
-  font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;
-  color:rgba(247,242,234,0.6);
-  margin-bottom:12px;
+  font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(247,242,234,0.62);
+  margin-bottom:16px;
 }
 .hero-areas-grid{
   display:grid;grid-template-columns:repeat(2,1fr);
   align-items:stretch;
-  gap:10px 16px;
+  gap:12px 18px;
 }
 /* o link ocupa a célula inteira: quando um nome quebra em duas linhas,
    os sublinhados de todos os itens continuam alinhados na mesma base */
@@ -302,7 +301,7 @@ nav:has(.nav-collapse.is-open)::after{
   width:100%;
   padding-bottom:8px;
   font-family:var(--font-serif);
-  font-size:1.01rem;font-weight:700;letter-spacing:-0.02em;line-height:1.3;
+  font-size:1.18rem;font-weight:700;letter-spacing:-0.02em;line-height:1.3;
   color:rgba(247,242,234,0.88);
   border-bottom:1px solid rgba(247,242,234,0.22);
   transition:color .2s ease, border-bottom-color .2s ease;
@@ -333,18 +332,20 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
   .section-head h2{font-size:2.35rem;}
   /* o texto recua para a esquerda para abrir espaço ao painel de textura */
   .hero{padding:96px calc(56px + 41%) 96px 56px;}
+  /* 700px é o mínimo para os quatro itens da faixa caberem em uma linha
+     com o corpo novo; o título continua quebrando em 3 linhas */
+  .hero-inner{max-width:700px;}
   .hero h1{font-size:3.4rem;line-height:1.08;}
-  .hero p.lede{margin-top:22px;font-size:0.95rem;line-height:1.62;}
-  .hero-ctas{margin-top:30px;}
+    .hero-ctas{margin-top:40px;}
   .btn-primary{padding:16px 26px;font-size:0.98rem;}
   .hero-trust{margin-top:24px;font-size:0.82rem;}
-  .hero-areas{margin-top:34px;}
+  .hero-areas{margin-top:52px;}
   .hero-areas-label{font-size:0.72rem;margin-bottom:15px;}
-  .hero-areas-grid a{font-size:0.97rem;padding-bottom:9px;}
+  .hero-areas-grid a{font-size:1.12rem;padding-bottom:11px;}
   .hero-ctas{flex-direction:row;justify-content:center;gap:16px;}
   .hero-ctas > a{width:auto;}
   .hero-areas-grid{grid-template-columns:repeat(4,1fr);gap:10px;}
-  .hero-areas{margin-top:34px;}
+  .hero-areas{margin-top:52px;}
 
   /* painel lateral: nítido na borda direita, apagando antes de chegar ao texto */
   .hero-texture{
@@ -416,10 +417,12 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
 /* --------------------------------------------------------------------------
    10. Nossos advogados
    -------------------------------------------------------------------------- */
-.lawyers-grid{display:flex;flex-direction:column;max-width:900px;margin:0 auto;}
+.lawyers-grid{display:flex;flex-direction:column;max-width:380px;margin:0 auto;}
 .lawyer-row{
-  display:flex;flex-direction:column;align-items:center;gap:7px;
-  text-align:center;
+  /* texto alinhado à esquerda dentro de uma coluna fixa; a coluna é que
+     fica centralizada, então os quatro nomes começam no mesmo x */
+  display:block;
+  text-align:left;
   padding:24px 6px;
   border-top:1px solid var(--border);
   transition:background .22s ease;
@@ -430,8 +433,8 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
 .lawyer-row:last-child{border-bottom:1px solid var(--border);}
 .lawyer-row:hover{background:var(--hover-tint);}
 .lawyer-name{font-family:var(--font-serif);font-size:1.3rem;font-weight:700;letter-spacing:-0.02em;line-height:1.25;}
-.lawyer-oab{font-size:0.78rem;color:var(--muted);margin-top:3px;}
-.lawyer-spec{font-size:0.88rem;color:var(--wine);font-weight:600;}
+.lawyer-oab{font-size:0.78rem;color:var(--muted);margin-top:4px;}
+.lawyer-spec{font-size:0.88rem;color:var(--wine);font-weight:600;margin-top:8px;}
 
 /* --------------------------------------------------------------------------
    11. Como atuamos
@@ -439,7 +442,7 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
 .steps{display:flex;flex-direction:column;max-width:900px;margin:0 auto;}
 .step{
   display:block;
-  padding:24px 4px;
+  padding:24px 14px;
   border-top:1px solid var(--border);
   transition:background .22s ease, padding-left .22s ease;
 }
@@ -448,20 +451,15 @@ section{padding:60px 24px;scroll-margin-top:calc(var(--nav-h) + 6px);}
              background .22s ease, padding-left .22s ease;
 }
 .step:last-child{border-bottom:1px solid var(--border);}
-.step:hover{background:var(--hover-tint);padding-left:14px;}
-
-/* traço no lugar da numeração: cresce de 0 até 36px quando a etapa entra
-   na tela ou recebe o mouse */
-.step::before{
-  content:"";display:block;
-  width:0;height:2px;
-  background:var(--wine);
-  margin-bottom:15px;
-  transition:width .55s ease;
+/* listras fixas: a separação entre as etapas não depende de hover nem de
+   scroll, está sempre visível */
+.steps .step:nth-child(odd){background-color:rgba(42,33,29,0.03);}
+/* o hover soma uma camada por cima, então rende o mesmo realce nas duas
+   listras, a clara e a escura */
+.step:hover{
+  background-image:linear-gradient(rgba(42,33,29,0.03),rgba(42,33,29,0.03));
+  padding-left:20px;
 }
-.step.is-visible::before,.step:hover::before{width:36px;}
-/* sem JS a classe de reveal nunca chega, então o traço já nasce pronto */
-.no-js .step::before{width:36px;}
 .step h3{font-size:1.18rem;font-weight:700;line-height:1.3;margin-bottom:5px;}
 .step p{font-size:0.92rem;color:var(--muted);line-height:1.55;max-width:50ch;}
 
@@ -590,7 +588,6 @@ footer .oab{margin-top:6px;color:rgba(247,242,234,0.58);}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .js .sr,.js .sr.is-visible{opacity:1;translate:none;}
-  .step::before{width:36px;}
   *,*::before,*::after{
     transition-duration:0.01ms !important;
     transition-delay:0s !important;
