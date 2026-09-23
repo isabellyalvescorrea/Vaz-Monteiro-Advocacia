@@ -5,9 +5,10 @@
 (function () {
   'use strict';
 
-  /* Número de atendimento do escritório, formato internacional, só dígitos.
-     Trocar aqui para apontar o formulário para outro WhatsApp. */
-  var WHATSAPP_NUMBER = '5511999999999';
+  /* Número de atendimento, formato internacional, só dígitos:
+     55 (Brasil) + 32 (DDD) + 999257395. Trocar aqui para apontar o
+     formulário para outro WhatsApp. */
+  var WHATSAPP_NUMBER = '5532999257395';
 
   /* ------------------------------------------------------------------------
      1. Menu mobile
@@ -120,8 +121,16 @@
       var area = fields[1].input.value;
       var desc = fields[2].input.value.trim();
 
-      var msg = 'Olá, meu nome é ' + nome + '. Gostaria de solicitar uma avaliação. ' +
-                'Área: ' + area + '. Descrição: ' + desc;
+      /* Quebras de linha deixam a mensagem legível no WhatsApp, e o aviso final
+         esclarece, para quem envia e para quem recebe, que o escritório é
+         fictício e o site é peça de portfólio. */
+      var msg = 'Olá, meu nome é ' + nome + '. Gostaria de solicitar uma avaliação.\n\n' +
+                'Área: ' + area + '\n' +
+                'Descrição: ' + desc + '\n\n' +
+                'Aviso: esta mensagem vem de uma demonstração. O escritório ' +
+                'Vaz & Monteiro Advocacia é fictício e este site faz parte de um ' +
+                'portfólio de desenvolvimento. Em um projeto real, o número aqui ' +
+                'seria o da empresa cliente.';
       var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
 
       var opened = window.open(url, '_blank', 'noopener');

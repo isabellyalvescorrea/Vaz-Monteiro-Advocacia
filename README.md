@@ -60,7 +60,8 @@ Cada push na branch de produção gera um novo deploy automaticamente.
 | Textos, advogados e perguntas | `index.html` |
 | Domínio nas metatags sociais | `index.html`, tags `og:image` e `twitter:image` |
 
-O número `5511999999999` é fictício e existe só para demonstrar o fluxo.
+O formulário abre o WhatsApp com a mensagem já montada a partir dos campos, e o texto
+inclui um aviso de que o escritório é fictício e o site é peça de portfólio.
 Depois do primeiro deploy, troque os caminhos de `og:image` e `twitter:image` pela URL
 absoluta do domínio, que é o formato que as redes sociais leem com mais confiabilidade.
 
