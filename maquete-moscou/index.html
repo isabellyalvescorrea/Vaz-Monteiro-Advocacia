@@ -1,0 +1,1634 @@
+<title>Maquete de Moscou</title>
+<meta name="description" content="Protótipo 3D interativo da maquete de Moscou com o passo a passo de cada peça em EVA, papelão, cola e massinha.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Patrick+Hand&display=swap">
+<style>
+  :root {
+    --bg: #ECEEE8;
+    --surface: #FFFFFF;
+    --surface-2: #F3F4F0;
+    --ink: #1A1C20;
+    --muted: #565C66;
+    --line: #D8DBD2;
+    --line-strong: #B9BDB2;
+    --accent: #B8202F;
+    --accent-ink: #FFFFFF;
+    --ok: #1F7A45;
+    --ok-ink: #FFFFFF;
+    --ok-soft: #E2F2E8;
+    --warn: #8A5200;
+    --warn-soft: #FCEFD8;
+    --hard: #B8202F;
+    --hard-soft: #FBE8EA;
+    --tape: #EAD8A4;
+    --tape-ink: #45370F;
+    --mat: #2A5E4D;
+    --mat-line: rgba(255, 255, 255, .07);
+    --mat-line-2: rgba(255, 255, 255, .15);
+    --on-mat: #EAF4EE;
+    --sw-border: rgba(0, 0, 0, .2);
+    --focus: #1F5FD1;
+    --shadow: 0 1px 2px rgba(25, 30, 25, .06), 0 12px 32px -14px rgba(25, 30, 25, .22);
+    --r: 16px;
+    --font-ui: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-display: "Bricolage Grotesque", "Atkinson Hyperlegible", system-ui, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111315;
+      --surface: #1A1D21;
+      --surface-2: #22262B;
+      --ink: #ECEEF1;
+      --muted: #A7ADB7;
+      --line: #2F343B;
+      --line-strong: #474D56;
+      --accent: #F0616E;
+      --accent-ink: #1C0A0D;
+      --ok: #5CC98C;
+      --ok-ink: #0D2417;
+      --ok-soft: #16301F;
+      --warn: #F2B55A;
+      --warn-soft: #36270E;
+      --hard: #F0616E;
+      --hard-soft: #3A1C21;
+      --tape: #5E4E24;
+      --tape-ink: #F6E7BF;
+      --mat: #173A30;
+      --mat-line: rgba(255, 255, 255, .05);
+      --mat-line-2: rgba(255, 255, 255, .11);
+      --on-mat: #DDEBE3;
+      --sw-border: rgba(255, 255, 255, .28);
+      --focus: #86ABFF;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 32px -14px rgba(0, 0, 0, .7);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111315;
+    --surface: #1A1D21;
+    --surface-2: #22262B;
+    --ink: #ECEEF1;
+    --muted: #A7ADB7;
+    --line: #2F343B;
+    --line-strong: #474D56;
+    --accent: #F0616E;
+    --accent-ink: #1C0A0D;
+    --ok: #5CC98C;
+    --ok-ink: #0D2417;
+    --ok-soft: #16301F;
+    --warn: #F2B55A;
+    --warn-soft: #36270E;
+    --hard: #F0616E;
+    --hard-soft: #3A1C21;
+    --tape: #5E4E24;
+    --tape-ink: #F6E7BF;
+    --mat: #173A30;
+    --mat-line: rgba(255, 255, 255, .05);
+    --mat-line-2: rgba(255, 255, 255, .11);
+    --on-mat: #DDEBE3;
+    --sw-border: rgba(255, 255, 255, .28);
+    --focus: #86ABFF;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 12px 32px -14px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.55 var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Estrutura ---------- */
+  .app { min-height: 100%; display: flex; flex-direction: column; }
+  .top {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 14px 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 auto; }
+  .brand h1 { white-space: nowrap; }
+  .logo { width: 38px; height: 38px; flex: none; }
+  .brand h1 { margin: 0; font: 800 20px/1.1 var(--font-display); letter-spacing: -.01em; }
+  .brand p { margin: 3px 0 0; font-size: 13px; color: var(--muted); }
+  .prog { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bar { width: 120px; height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; background: var(--ok); border-radius: inherit; transition: width .45s ease; }
+
+  .main { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 0 16px 16px; }
+
+  /* ---------- Visualizador 3D (tapete de corte) ---------- */
+  .viewer {
+    position: relative; overflow: hidden; border-radius: var(--r);
+    height: 58vh; height: min(58svh, 560px); min-height: 330px;
+    background-color: var(--mat);
+    background-image:
+      linear-gradient(var(--mat-line-2) 1px, transparent 1px),
+      linear-gradient(90deg, var(--mat-line-2) 1px, transparent 1px),
+      linear-gradient(var(--mat-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--mat-line) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position: -1px -1px;
+    box-shadow: var(--shadow);
+  }
+  .viewer::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(120% 95% at 50% 42%, transparent 55%, rgba(0, 0, 0, .3));
+  }
+  .viewer canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; touch-action: none; outline: none; }
+  .viewer canvas.is-hot { cursor: pointer; }
+  .hint {
+    position: absolute; top: 12px; left: 14px; right: 14px; z-index: 3; pointer-events: none;
+    color: var(--on-mat); font-size: 12.5px; line-height: 1.35;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+  }
+  .toolbar { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 3; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
+  .tb {
+    pointer-events: auto; display: inline-flex; align-items: center; gap: 6px;
+    min-height: 38px; padding: 8px 13px; border: 0; border-radius: 99px;
+    background: var(--surface); color: var(--ink);
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .28);
+    transition: background .2s, color .2s, transform .12s;
+  }
+  .tb:hover { transform: translateY(-1px); }
+  .tb:active { transform: translateY(0); }
+  .tb[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+  .tb svg { width: 16px; height: 16px; flex: none; }
+
+  .pins { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .pins[hidden] { display: none !important; }
+  .pin {
+    position: absolute; left: 0; top: 0; pointer-events: auto;
+    width: 28px; height: 28px; border-radius: 50%; padding: 0;
+    display: grid; place-items: center;
+    background: #FFFFFF; color: #1A1C20; border: 2px solid #B8202F;
+    font: 700 13px/1 var(--font-ui); font-variant-numeric: tabular-nums;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .35); cursor: pointer;
+    transition: scale .15s, background .2s, color .2s, opacity .2s;
+  }
+  .pin:hover, .pin:focus-visible { scale: 1.15; }
+  .pin.is-active { background: #B8202F; color: #FFFFFF; border-color: #FFFFFF; scale: 1.15; }
+  .pin.is-done:not(.is-active) { border-color: #1F7A45; }
+  .pin.is-dim { opacity: .5; }
+  .pin::after {
+    content: attr(data-name); position: absolute; left: 50%; bottom: calc(100% + 7px); translate: -50% 0;
+    white-space: nowrap; padding: 4px 8px; border-radius: 6px;
+    background: #1A1C20; color: #FFFFFF; font-size: 12px; font-weight: 700;
+    opacity: 0; pointer-events: none; transition: opacity .15s;
+  }
+  .pin:hover::after, .pin:focus-visible::after { opacity: 1; }
+
+  .tooltip {
+    position: absolute; left: 0; top: 0; z-index: 4; pointer-events: none;
+    padding: 8px 11px; border-radius: 10px; max-width: 230px;
+    background: var(--surface); color: var(--ink); box-shadow: var(--shadow);
+    font-size: 13px; line-height: 1.35;
+  }
+  .tooltip b { display: block; font-size: 14px; }
+  .tooltip span { color: var(--muted); }
+
+  .loading {
+    position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; align-content: center; gap: 12px;
+    padding: 24px; text-align: center; color: var(--on-mat); font-weight: 700; background: var(--mat);
+  }
+  .spin { width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .25); border-top-color: #FFFFFF; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading.is-error .spin { display: none; }
+  .loading p { margin: 0; max-width: 34ch; font-weight: 400; }
+
+  /* ---------- Painel de instruções ---------- */
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); min-width: 0; }
+  .stepper {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    display: flex; gap: 8px; overflow-x: auto; padding: 12px;
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    border-radius: var(--r) var(--r) 0 0; scrollbar-width: thin;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 22px), transparent);
+            mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 22px), transparent);
+  }
+  .chip {
+    flex: none; display: inline-flex; align-items: center; gap: 8px;
+    min-height: 38px; padding: 5px 13px 5px 5px; border-radius: 99px;
+    border: 1px solid var(--line); background: var(--surface); cursor: pointer;
+    font-size: 14px; white-space: nowrap;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip .n {
+    width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--surface-2); font-weight: 700; font-size: 12px; font-variant-numeric: tabular-nums;
+    transition: background .2s, color .2s;
+  }
+  .chip .n svg { width: 14px; height: 14px; }
+  .chip.is-done .n { background: var(--ok); color: var(--ok-ink); }
+  .chip.is-active { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .chip.is-active .n { background: var(--accent); color: var(--accent-ink); }
+
+  .content { padding: 22px 20px 28px; scroll-margin-top: 72px; }
+  .content > section { margin-top: 26px; }
+  .eyebrow {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+    font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+  }
+  .eyebrow .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--line-strong); }
+  .lvl { padding: 3px 9px; border-radius: 99px; letter-spacing: .05em; }
+  .lvl-facil { background: var(--ok-soft); color: var(--ok); }
+  .lvl-medio { background: var(--warn-soft); color: var(--warn); }
+  .lvl-dificil { background: var(--hard-soft); color: var(--hard); }
+  .content h2 {
+    margin: 10px 0 8px; font: 800 clamp(27px, 3.2vw, 33px)/1.08 var(--font-display);
+    letter-spacing: -.02em; text-wrap: balance;
+  }
+  .content h3 { margin: 0 0 12px; font: 700 18px/1.25 var(--font-display); letter-spacing: -.005em; }
+  .content h4 { margin: 0 0 8px; font-size: 13px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .lead { margin: 0; color: var(--muted); max-width: 62ch; }
+
+  /* Fita crepe com as medidas */
+  .tapes { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 10px 8px; }
+  .tape {
+    padding: 8px 15px; font-size: 13.5px; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums;
+    color: var(--tape-ink);
+    background: linear-gradient(90deg, rgba(255, 255, 255, .22), transparent 25%, transparent 75%, rgba(255, 255, 255, .16)), var(--tape);
+    clip-path: polygon(0 0, 100% 0, calc(100% - 3px) 20%, 100% 40%, calc(100% - 3px) 60%, 100% 80%, calc(100% - 2px) 100%, 0 100%, 3px 80%, 0 60%, 3px 40%, 0 20%);
+    transform: rotate(-.8deg);
+  }
+  .tape:nth-child(even) { transform: rotate(.7deg); }
+
+  .mats { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
+  .mats li { display: flex; gap: 11px; align-items: flex-start; }
+  .sw { flex: none; width: 18px; height: 18px; margin-top: 3px; border-radius: 4px; background: var(--sw); border: 1px solid var(--sw-border); }
+  .sw-clay { border-radius: 50%; box-shadow: inset -3px -3px 0 rgba(0, 0, 0, .14); }
+  .sw-tool { background: none; border: 1.5px dashed var(--muted); border-radius: 50%; }
+
+  .h3row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+  .h3row h3 { margin: 0; }
+  .count { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .steps { list-style: none; padding: 0; margin: 0 -10px; display: grid; gap: 2px; }
+  .step {
+    position: relative; display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: start;
+    padding: 10px; border-radius: 12px; cursor: pointer; transition: background .2s;
+  }
+  .step:hover { background: var(--surface-2); }
+  .step input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+  .step .num {
+    width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+    border: 2px solid var(--line-strong); background: var(--surface);
+    font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  .step input:checked + .num { background: var(--ok); border-color: var(--ok); color: transparent; font-size: 0; }
+  .step input:checked + .num::after {
+    content: ""; width: 12px; height: 7px; border-left: 2.5px solid var(--ok-ink); border-bottom: 2.5px solid var(--ok-ink);
+    transform: translate(0, -2px) rotate(-45deg);
+  }
+  .step input:focus-visible + .num { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .step .txt { padding-top: 4px; }
+  .step input:checked ~ .txt { color: var(--muted); }
+  .step .txt b { color: var(--ink); font-weight: 700; }
+
+  /* Dica com linha de recorte */
+  .tipbox { margin-top: 24px; padding: 14px 16px 15px; border: 2px dashed var(--line-strong); border-radius: 14px; background: var(--surface-2); }
+  .tiplabel { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  .tiplabel svg { width: 16px; height: 16px; }
+  .tipbox p { margin: 6px 0 0; }
+
+  .pager { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 26px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 46px; padding: 11px 16px; border-radius: 12px;
+    border: 1px solid var(--line-strong); background: var(--surface); cursor: pointer;
+    font-weight: 700; font-size: 15px; text-align: left;
+    transition: background .2s, border-color .2s, transform .1s, filter .2s;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn:active { transform: translateY(1px); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { border-color: var(--accent); filter: brightness(1.07); }
+  .btn-ghost { border-color: transparent; color: var(--muted); font-weight: 400; font-size: 14px; }
+  .btn-ghost:hover { border-color: var(--line-strong); color: var(--ink); }
+  .btn-ghost.is-armed { color: var(--accent); border-color: var(--accent); font-weight: 700; }
+  .pager .next { margin-left: auto; }
+
+  /* Visão geral */
+  .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 20px 0 0; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .facts div { background: var(--surface); padding: 12px 14px; }
+  .facts dt { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .facts dd { margin: 2px 0 0; font: 800 20px/1.2 var(--font-display); font-variant-numeric: tabular-nums; }
+  .days { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .days li { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; }
+  .day-h { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .day-h span { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .days p { margin: 4px 0 0; font-size: 15px; }
+  .order { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  .order-row {
+    width: 100%; display: grid; grid-template-columns: 30px 1fr auto 16px; gap: 12px; align-items: center;
+    padding: 9px 10px; border: 1px solid transparent; border-radius: 12px; background: none; cursor: pointer; text-align: left;
+    transition: background .2s, border-color .2s;
+  }
+  .order-row:hover { background: var(--surface-2); border-color: var(--line); }
+  .order-row .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--line); font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .order-row.is-done .n { background: var(--ok); border-color: var(--ok); color: var(--ok-ink); }
+  .order-row .tm { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .order-row svg { width: 16px; height: 16px; color: var(--muted); }
+  .shop + .shop { margin-top: 18px; }
+
+  @media (min-width: 980px) {
+    .app { height: 100%; }
+    .main { grid-template-columns: minmax(0, 1fr) 440px; min-height: 0; }
+    .viewer { height: auto; min-height: 0; }
+    .panel { overflow-y: auto; min-height: 0; scrollbar-width: thin; }
+  }
+  @media (max-width: 520px) {
+    .top { padding-block: 12px; }
+    .brand h1 { font-size: 18px; }
+    .bar { display: none; }
+    .tb .lbl-opt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .tb.icon-only { padding: 8px 11px; }
+    .content { padding-inline: 16px; }
+    .order-row { grid-template-columns: 30px 1fr auto; }
+    .order-row svg { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 38 38" aria-hidden="true">
+        <rect width="38" height="38" rx="11" style="fill: var(--accent)"/>
+        <path d="M19 6.5v4.2M17 8.3h4" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+        <path d="M19 10.7c-4.4 3.1-7.6 5.8-7.6 10.1 0 2.8 2.1 4.8 4.4 4.8h6.4c2.3 0 4.4-2 4.4-4.8 0-4.3-3.2-7-7.6-10.1z" fill="#fff"/>
+        <path d="M15 14.5c2.5 1.5 5.5 3.8 7.6 7.4M13.2 18.6c2.4 1.2 4.6 3 6.2 5.8" stroke="#B8202F" stroke-width="1.3" fill="none" stroke-linecap="round" opacity=".55"/>
+        <rect x="12" y="26.3" width="14" height="5.2" rx="1.2" fill="#fff" opacity=".85"/>
+      </svg>
+      <div>
+        <h1>Maquete de Moscou</h1>
+        <p>EVA · papelão · cola · massinha</p>
+      </div>
+    </div>
+    <div class="prog" aria-live="polite">
+      <div class="bar" aria-hidden="true"><span id="progFill"></span></div>
+      <span id="progText">0 de 0 passos</span>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="viewer" id="viewer" aria-label="Protótipo 3D da maquete. Toque numa peça ou num número para ver o passo a passo.">
+      <canvas id="scene" aria-hidden="true"></canvas>
+      <div class="pins" id="pins"></div>
+      <p class="hint" id="hint">Arraste para girar · pinça ou roda do mouse para zoom · toque numa peça</p>
+      <div class="tooltip" id="tooltip" hidden></div>
+      <div class="toolbar" role="toolbar" aria-label="Controles do 3D">
+        <button class="tb" type="button" id="btnHome">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+          Visão geral
+        </button>
+        <button class="tb icon-only" type="button" id="btnRotate" aria-pressed="false" aria-label="Girar sozinho">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.35-5.65"/><path d="M20 4v5h-5"/></svg>
+          <span class="lbl-opt">Girar</span>
+        </button>
+        <button class="tb icon-only" type="button" id="btnPins" aria-pressed="true" aria-label="Mostrar números das etapas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+          <span class="lbl-opt">Números</span>
+        </button>
+        <button class="tb icon-only" type="button" id="btnIsolate" aria-pressed="true" aria-label="Destacar a peça escolhida">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3.5M12 18v3.5M2.5 12H6M18 12h3.5"/></svg>
+          <span class="lbl-opt">Destacar</span>
+        </button>
+      </div>
+      <div class="loading" id="loading"><div class="spin" aria-hidden="true"></div><span id="loadingText">Montando a maquete…</span></div>
+    </section>
+
+    <aside class="panel" id="panel" aria-label="Passo a passo">
+      <nav class="stepper" id="stepper" aria-label="Etapas da montagem"></nav>
+      <article class="content" id="content" aria-live="polite"></article>
+    </aside>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* =========================================================
+     Conteúdo: cada peça da maquete, na ordem de montagem
+     ========================================================= */
+  var C = {
+    preto: '#1D1E22', vermelho: '#C8283C', verde: '#2E7D4F', cinza: '#9EA3A8', azul: '#2A6FD1',
+    branco: '#FFFFFF', bege: '#EADBBD', amarelo: '#F2C230', marrom: '#7A4B2A', papelao: '#B88A57'
+  };
+  function E(c, t) { return { k: 'eva', c: c, t: t }; }
+  function K(c, t) { return { k: 'clay', c: c, t: t }; }
+  function P(t) { return { k: 'eva', c: C.papelao, t: t }; }
+  function T(t) { return { k: 'tool', c: null, t: t }; }
+
+  var PARTS = [
+    {
+      id: 'base', tab: 'Base', name: 'Base de papelão', min: 30, level: 'Fácil',
+      short: 'É a caixa que segura a maquete inteira. Com o fundo em duas camadas, ela não entorta quando você carregar.',
+      dims: ['Fundo 60 × 40 cm', 'Bordas de 5 cm', 'Recorte inicial 70 × 50 cm'],
+      mats: [P('Papelão grosso: 1 peça de 70 × 50 cm e 1 placa de 60 × 40 cm'), E(C.preto, 'EVA preto: tiras de 5 cm para encapar as bordas'), T('Fita crepe'), T('Cola branca ou cola de EVA'), T('Régua, lápis e tesoura (estilete só com um adulto)')],
+      steps: [
+        'No papelão de <b>70 × 50 cm</b>, risque uma linha a <b>5 cm</b> de cada borda. O retângulo do meio, de <b>60 × 40 cm</b>, é o fundo da caixa.',
+        'Recorte fora os <b>4 quadrados de 5 × 5 cm</b> dos cantos.',
+        'Passe a ponta da tesoura fechada por cima das linhas, com a régua, sem cortar. Esse vinco faz as abas dobrarem retinhas.',
+        'Dobre as 4 abas para cima e prenda os cantos com fita crepe por dentro e por fora.',
+        'Cole a placa extra de <b>60 × 40 cm</b> no fundo, por dentro. Duas camadas deixam a base firme.',
+        'Encape a parte de fora das bordas com tiras de EVA preto de <b>5 cm</b> de altura. Deixe a frente sem enfeite: o letreiro entra na etapa 11.'
+      ],
+      tip: 'Achou uma caixa grande de mercado ou de mudança? Corte a altura dela para 5 cm e pule os passos 1 a 4.',
+      pin: [-27, 4.4, 20.3], view: [0.25, 0.8, 1]
+    },
+    {
+      id: 'painel', tab: 'Painel', name: 'Painel de fundo', min: 60, level: 'Fácil',
+      short: 'O quadro preto com bandeira, título, textos e mapa. Decore com ele deitado na mesa e só depois cole na caixa.',
+      dims: ['60 × 40 cm', 'Bandeira 10 × 6,5 cm', 'Quadros de texto 17 × 11 cm'],
+      mats: [P('Papelão de 60 × 40 cm e 2 triângulos de 15 × 20 cm (apoio)'), E(C.preto, 'EVA preto: 1 folha inteira (40 × 60 cm, já é a medida certa)'), E(C.branco, 'EVA branco: letras do título e os 2 quadros de texto'), E(C.azul, 'EVA azul e vermelho: faixas da bandeira'), K(C.vermelho, 'Massinha vermelha: marcador de Moscou no mapa'), T('Caneta preta, caneta ou corretivo branco e cola')],
+      steps: [
+        'Cole a folha de EVA preto inteira sobre o papelão de <b>60 × 40 cm</b>. Passe cola em zigue-zague e alise do centro para as bordas para não formar bolhas.',
+        'Bandeira da Rússia: 3 faixas de <b>10 × 2,2 cm</b>, de cima para baixo <b>branco, azul e vermelho</b>. Cole no canto de cima, à esquerda.',
+        'Título: recorte <b>RÚSSIA</b> em EVA branco, com letras de <b>5 cm</b> de altura. Embaixo escreva <b>— Moscou —</b> com caneta branca. Risque tudo a lápis antes.',
+        'Quadro de texto (<b>17 × 11 cm</b>, EVA branco): “Moscou é a capital da Rússia e uma das maiores cidades do mundo. É conhecida por sua história, cultura, arquitetura e por ser o centro político, econômico e cultural do país.”',
+        'Quadro da lista (<b>17 × 11 cm</b>): “Pontos turísticos de Moscou: Praça Vermelha, Kremlin, Catedral de São Basílio, Teatro Bolshoi e Museu Histórico Estatal.”',
+        'Mapa: no canto direito, desenhe o contorno da Rússia com caneta ou corretivo branco (dá para decalcar de um mapa impresso). Moscou fica bem a oeste: marque com uma bolinha de massinha vermelha.',
+        'Cole os <b>2 triângulos</b> atrás do painel, em pé, como apoio. Depois cole o painel dentro da caixa, encostado na borda de trás.'
+      ],
+      tip: 'Sem caneta branca? Corretivo em caneta escreve muito bem no EVA preto. Você também pode imprimir os textos e colar.',
+      pin: [0, 39.3, -19.9], view: [0, 0.25, 1]
+    },
+    {
+      id: 'chao', tab: 'Chão', name: 'Chão: praça e gramados', min: 50, level: 'Médio',
+      short: 'O chão fica 2 cm acima do fundo da caixa. Assim o rio fica mais baixo e a maquete ganha profundidade, como na foto.',
+      dims: ['Plataforma 60 × 40 cm', 'Altura de 2 cm', 'Pedras de 3 cm'],
+      mats: [P('Papelão: 1 placa de 60 × 40 cm e tiras de 2 cm de largura'), E(C.cinza, 'EVA cinza: 2 folhas (praça e calçadas)'), E(C.verde, 'EVA verde: 1 folha (gramados)'), T('Papel para o molde, caneta preta e cola')],
+      steps: [
+        'Faça o molde do rio numa folha de papel: a margem sai da lateral esquerda a <b>19 cm</b> do painel, desce em curva e chega na borda da frente a <b>48 cm</b> do lado esquerdo. Veja o 3D de cima para copiar a curva.',
+        'Risque o molde na placa de <b>60 × 40 cm</b> e recorte tirando a área do rio. O que sobra é a plataforma do chão.',
+        'Cole embaixo dela tiras de papelão de <b>2 cm</b> de largura, em pé, a cada <b>8 cm</b>, como costelas. Assim o chão fica alto e firme.',
+        'Cole a plataforma dentro da caixa, encostada no painel.',
+        'Encape a plataforma com EVA cinza. Risque um quadriculado de <b>3 cm</b> com caneta para imitar as pedras da Praça Vermelha.',
+        'Gramados em EVA verde: um no canto esquerdo, ao lado do Bolshoi (uns <b>9 × 6 cm</b>), e um grande no canto direito, entre o Kremlin e a avenida. Arredonde as pontas e cole.'
+      ],
+      tip: 'Sem tiras de papelão? Cole 4 camadas de papelão, uma sobre a outra. Dá os mesmos 2 cm, só gasta mais material.',
+      pin: [10, 2.7, -2.5], view: [0, 1.4, 0.8]
+    },
+    {
+      id: 'rio', tab: 'Rio', name: 'Rio Moscou', min: 30, level: 'Fácil',
+      short: 'O rio atravessa a cidade. Na maquete ele fica no fundo da caixa, 2 cm abaixo da rua, com um muro de pedras na margem.',
+      dims: ['Largura de 10 a 13 cm', 'Muro da margem 2 cm'],
+      mats: [E(C.azul, 'EVA azul: 1 folha'), E(C.cinza, 'EVA cinza: tiras de 2 cm para o muro'), T('Cola branca (efeito de água)'), T('Caneta preta e o molde do rio da etapa 3')],
+      steps: [
+        'Use o mesmo molde do rio. Risque no EVA azul, recorte e cole no fundo da caixa, no espaço livre na frente da plataforma.',
+        'Muro da margem: corte tiras de EVA cinza de <b>2 cm</b> de altura e cole em pé, cobrindo a lateral da plataforma em toda a curva.',
+        'Desenhe tijolinhos no muro com caneta: linhas a cada <b>0,5 cm</b> e tracinhos alternados.',
+        'Água brilhante: espalhe uma camada fina de cola branca sobre o rio, com o dedo ou um pincel, fazendo movimentos curvos. Ao secar ela fica transparente e parece água.',
+        'Espere a cola secar bem, umas <b>2 horas</b>, antes de colocar o barco.'
+      ],
+      tip: 'Se tiver glitter azul ou prateado, misture um pouquinho na cola do passo 4.',
+      pin: [-20, 0.8, 12], view: [-0.15, 1.2, 1]
+    },
+    {
+      id: 'avenida', tab: 'Avenida', name: 'Avenida e ponte', min: 60, level: 'Médio',
+      short: 'A avenida acompanha o rio. Do lado esquerdo ela vira uma ponte de pedra com 3 arcos.',
+      dims: ['Rua com 5 cm de largura', 'Ponte 19 × 6 cm', 'Arcos 4,5 × 1,5 cm'],
+      mats: [P('Papelão: 1 retângulo de 19 × 6 cm e 2 tiras de 19 × 2 cm'), E(C.preto, 'EVA preto ou cinza-escuro: a rua (1 folha)'), E(C.cinza, 'EVA cinza: encapar a ponte e o guarda-corpo'), E(C.branco, 'EVA branco: faixas da rua'), T('Um copo ou tampa para riscar os arcos, caneta e cola')],
+      steps: [
+        'Tabuleiro da ponte: recorte um retângulo de papelão de <b>19 × 6 cm</b>.',
+        'Laterais: recorte 2 tiras de papelão de <b>19 × 2 cm</b>. Na parte de baixo de cada uma, risque <b>3 arcos</b> com a borda de um copo (<b>4,5 cm</b> de largura e <b>1,5 cm</b> de altura) e recorte.',
+        'Cole as laterais em pé embaixo do tabuleiro, uma de cada lado. Encape com EVA cinza e desenhe as pedras com caneta.',
+        'Cole a ponte sobre o rio, na esquerda, indo da lateral da caixa até a plataforma. O tabuleiro fica na mesma altura do chão.',
+        'Rua: recorte uma faixa de EVA preto de <b>5 cm</b> de largura que sai da ponte, segue a margem do rio e desce em curva até a frente, à direita. Emende em 2 ou 3 partes se precisar.',
+        'Faixas: tracinhos de EVA branco de <b>1,5 × 0,3 cm</b> no meio da rua, a cada <b>2 cm</b>, e uma linha fina contínua em cada lado.',
+        'Guarda-corpo: tirinhas de EVA cinza de <b>0,6 cm</b> coladas em pé nas duas bordas da ponte.'
+      ],
+      tip: 'Para a curva ficar certinha, desenhe primeiro a linha do meio da rua. Depois marque 2,5 cm para cada lado com a régua, ponto por ponto, e ligue os pontos.',
+      pin: [-26, 3.3, 3.5], view: [0.25, 0.9, 1]
+    },
+    {
+      id: 'bolshoi', tab: 'Bolshoi', name: 'Teatro Bolshoi', min: 75, level: 'Médio',
+      short: 'Um dos teatros de balé mais famosos do mundo, aberto em 1825. A marca dele são as 8 colunas da entrada e a carruagem com cavalos no topo.',
+      dims: ['Corpo 16 × 9 × 7 cm', '8 colunas de 5 cm', 'Telhado 19 × 10 cm'],
+      mats: [P('Caixa de leite longa-vida ou papelão'), E(C.bege, 'EVA bege ou creme: 1 folha'), E(C.verde, 'EVA verde: telhados'), K(C.branco, 'Massinha branca ou bege: 8 colunas'), E(C.marrom, 'EVA marrom ou preto: portas, janelas e a carruagem'), T('8 palitos de dente e cola')],
+      steps: [
+        'Corpo: deite uma caixa de leite. Ela tem quase <b>16 × 9 × 7 cm</b>. Sem caixa, monte uma de papelão com essas medidas.',
+        'Encape com EVA bege. Nas laterais, cole janelinhas de EVA marrom de <b>1 × 1,5 cm</b> em 2 fileiras.',
+        'Degraus: retângulo de papelão de <b>13 × 3,5 cm</b> encapado de bege, colado rente à frente do prédio.',
+        'Colunas: faça 8 rolinhos de massinha branca com <b>0,8 cm</b> de grossura e <b>5 cm</b> de altura, com um palito de dente dentro de cada. Espete nos degraus deixando <b>1,7 cm</b> entre elas.',
+        'Teto das colunas: tira de papelão de <b>13 × 3,5 cm</b> apoiada em cima delas. Por cima, um triângulo de EVA bege de <b>13 cm</b> de base e <b>3 cm</b> de altura: é o frontão.',
+        'Telhado: dobre ao meio um retângulo de EVA verde de <b>19 × 10 cm</b> e cole sobre o corpo como um “V” de cabeça para baixo. Risque linhas a cada <b>1,5 cm</b> para imitar telhas. Feche a frente com um triângulo bege.',
+        'Detalhe: recorte a silhueta da carruagem com cavalos em EVA marrom, com uns <b>2 cm</b>, e cole no alto do frontão.'
+      ],
+      tip: 'Massinha muito mole? Deixe as colunas 10 minutos na geladeira antes de espetar.',
+      pin: [-18, 14.4, -12], view: [-0.45, 0.5, 1]
+    },
+    {
+      id: 'basilio', tab: 'São Basílio', name: 'Catedral de São Basílio', min: 90, level: 'Difícil',
+      short: 'A catedral das cúpulas coloridas, terminada em 1561, fica na Praça Vermelha. Cada cúpula tem um padrão diferente.',
+      dims: ['Base 13 × 10 × 4 cm', 'Torre central com 22 cm', 'Cúpulas de 3,5 cm'],
+      mats: [P('5 rolos de papel higiênico, 1 de papel-toalha e papelão'), E(C.vermelho, 'EVA vermelho: 1 folha'), E(C.branco, 'EVA branco: frisos e janelinhas'), K(C.verde, 'Massinha verde, amarela, azul, branca e vermelha: cúpulas'), E(C.amarelo, 'EVA ou massinha amarela: cruzes'), T('Palitos de dente e cola')],
+      steps: [
+        'Base: caixinha de papelão de <b>13 × 10 × 4 cm</b> encapada com EVA vermelho. Cole tirinhas brancas nas bordas e janelinhas brancas em arco na frente.',
+        'Torre central: corte o rolo de papel-toalha com <b>10 cm</b>, encape de vermelho e cole no meio da base.',
+        'Telhado da torre central: risque um círculo de <b>7,5 cm</b> de raio no EVA vermelho, recorte uma fatia de <b>1/3</b> (como pizza) e enrole em cone até encaixar no rolo.',
+        'Torres menores: corte 4 rolos de papel higiênico com <b>5 a 8 cm</b> e 1 com <b>3 cm</b>. Encape de vermelho e cole ao redor da torre central: 2 na frente, 2 atrás e a pequena na frente, à esquerda.',
+        'Tampe o topo de cada rolo com um círculo de papelão. Ele segura o peso da cúpula.',
+        'Cúpulas em forma de cebola: faça uma bola de massinha de <b>3,5 cm</b> e puxe a ponta para cima, como uma gota. Enrole cobrinhas finas de outra cor em espiral: verde com amarelo, azul com branco, vermelho com zigue-zague branco. Faça também uma amarela lisa e uma verde pequena.',
+        'Espete cada cúpula num palito e fixe no topo do rolo. No alto do cone central vai uma bolinha amarela, que faz o papel da cúpula dourada.',
+        'Cruzes: cole dois pedacinhos de palito de dente em cruz, encape com tirinha de EVA amarelo e espete no topo de cada cúpula.'
+      ],
+      tip: 'Faça as cúpulas primeiro e deixe descansando enquanto monta as torres. Massinha fria segura melhor as listras.',
+      pin: [0, 26.2, -10.5], view: [0.3, 0.45, 1]
+    },
+    {
+      id: 'kremlin', tab: 'Kremlin', name: 'Kremlin e Torre Spasskaya', min: 90, level: 'Difícil',
+      short: 'A muralha vermelha do Kremlin e a Torre Spasskaya, a do relógio, com a estrela vermelha no topo. Ela fica de frente para a Praça Vermelha.',
+      dims: ['Muralha 23 × 6 × 1,5 cm', 'Torre com 30 cm', 'Relógio de 3,5 cm'],
+      mats: [P('Papelão e 1 rolo de papel higiênico'), E(C.vermelho, 'EVA vermelho: 2 folhas'), E(C.verde, 'EVA verde: pico e telhados das torres'), E(C.branco, 'EVA branco: frisos entre os andares'), E(C.preto, 'EVA preto e amarelo: relógio e portão'), T('Palitos de churrasco (mastros) e cola')],
+      steps: [
+        'Muralha: monte uma caixa comprida de papelão de <b>23 × 6 × 1,5 cm</b> e encape com EVA vermelho.',
+        'Ameias, os dentinhos do topo: recorte uma tira de EVA vermelho com dentes de <b>1 cm</b> e um “V” no alto de cada dente, como rabo de andorinha. Cole no topo da muralha.',
+        'Torre, andar 1: caixa de <b>6 × 5 × 11 cm</b>. Cole embaixo, na frente, um portão em arco de EVA preto de <b>2,5 × 4 cm</b>.',
+        'Andar 2: caixa de <b>4,5 × 4,5 × 4,5 cm</b>. Relógio: círculo de EVA preto de <b>3,5 cm</b> com borda e ponteiros amarelos. Marque as horas com pontinhos.',
+        'Andar 3: rolo de papel higiênico de <b>3 cm</b> encapado de vermelho. Separe os andares com tirinhas de EVA branco.',
+        'Pico: risque um círculo de <b>8,5 cm</b> de raio no EVA verde, use uma fatia de <b>1/4</b> e enrole em cone de <b>8 cm</b> de altura.',
+        'Estrela: recorte 2 estrelas de 5 pontas de <b>3 cm</b> em EVA vermelho, cole uma de cada lado de um palito e espete no pico.',
+        'Torres das pontas: 2 caixas de <b>3 × 3 × 9 cm</b> com pirâmide verde (4 triângulos de <b>3 cm</b> de base e <b>5 cm</b> de altura) e uma bandeirinha vermelha num palito.',
+        'Cole a muralha perto do painel, a torre do relógio no meio e um pouco para a frente, e as torres pequenas nas pontas.'
+      ],
+      tip: 'Monte a torre de baixo para cima e deixe cada andar secar 5 minutos antes de colar o próximo. Assim ela não entorta.',
+      pin: [18.5, 33.6, -11], view: [0.4, 0.42, 1]
+    },
+    {
+      id: 'arvores', tab: 'Árvores', name: 'Árvores de massinha', min: 40, level: 'Fácil',
+      short: 'As árvores deixam a maquete viva. São 14, todas de massinha, e entram quase no fim.',
+      dims: ['Copa de 2,5 a 3 cm', 'Tronco de 2 cm', '14 árvores'],
+      mats: [K('#3F9A4C', 'Massinha verde em 2 tons (bastante)'), K(C.marrom, 'Massinha marrom: troncos'), T('Palitos de dente'), T('Garfo ou escova de dentes velha, para a textura')],
+      steps: [
+        'Tronco: rolinho de massinha marrom de <b>0,6 cm</b> de grossura e <b>2 cm</b> de altura, com meio palito de dente dentro.',
+        'Copa: bola de massinha verde de <b>2,5 a 3 cm</b>. Misture dois verdes sem amassar demais, para ficar mesclado.',
+        'Textura: cutuque a bola toda com um garfo ou escova de dentes. Na hora parece folhagem.',
+        'Espete a copa na ponta do palito do tronco.',
+        'Base: aperte o tronco sobre uma bolinha achatada de massinha e cole no chão.',
+        'Onde colocar: <b>3</b> na beira da avenida, <b>6</b> no gramado da direita e <b>5</b> perto do Teatro Bolshoi.'
+      ],
+      tip: 'Varie o tamanho das copas. Árvores todas iguais parecem de brinquedo; tamanhos diferentes parecem de verdade.',
+      pin: [26, 7.4, 9.5], view: [0.35, 1, 1]
+    },
+    {
+      id: 'barco', tab: 'Barco e carros', name: 'Barco e carrinhos', min: 30, level: 'Fácil',
+      short: 'Os detalhes pequenos fazem a maquete parecer uma cidade de verdade.',
+      dims: ['Barco 9 × 3 cm', 'Carros 3 × 1,5 × 1 cm'],
+      mats: [K(C.branco, 'Massinha branca: barco'), K(C.azul, 'Massinha azul: janelas e faixa do barco'), K(C.vermelho, 'Massinha vermelha e amarela: carros'), K(C.preto, 'Massinha preta: rodas'), E(C.branco, 'EVA branco (opcional, casco do barco)')],
+      steps: [
+        'Casco: modele massinha branca com <b>9 × 3 cm</b> e <b>1 cm</b> de altura, com a frente em ponta. Outra opção: recorte 3 camadas de EVA branco nesse formato e cole uma sobre a outra.',
+        'Faixa: uma cobrinha fina de massinha azul em volta do casco.',
+        'Cabine: bloco de massinha branca de <b>6 × 2 × 1,5 cm</b> em cima do casco, com um teto um pouquinho maior.',
+        'Janelas: quadradinhos de massinha azul de <b>0,5 cm</b>, em fila, dos dois lados da cabine.',
+        'Carros: blocos de <b>3 × 1,5 × 1 cm</b>, um vermelho e um amarelo (o táxi), com uma cabine menor em cima. Rodas: 4 bolinhas pretas achatadas.',
+        'Cole o barco no meio do rio, depois que a cola da água secar. Os carros vão na avenida: um na ponte e outro na curva.'
+      ],
+      tip: 'Lave as mãos entre uma cor e outra de massinha. Assim o barco branco não fica encardido.',
+      pin: [-5, 4, 14], view: [0, 0.9, 1]
+    },
+    {
+      id: 'placas', tab: 'Plaquinhas', name: 'Plaquinhas e letreiro', min: 40, level: 'Fácil',
+      short: 'Os nomes dos lugares e o letreiro da frente. Capriche na letra: é a primeira coisa que o professor lê.',
+      dims: ['Plaquinhas 8 × 2 cm', 'Letras do letreiro 3,5 cm', 'Bandeiras 6,5 × 4 cm'],
+      mats: [E(C.preto, 'EVA preto: plaquinhas'), E(C.branco, 'EVA branco: letras do letreiro e faixa das bandeiras'), E(C.azul, 'EVA azul e vermelho: bandeiras'), P('Papelão: suportes em “L”'), T('Caneta ou corretivo branco e cola')],
+      steps: [
+        'Recorte as plaquinhas em EVA preto: Teatro Bolshoi (<b>8 × 2 cm</b>), Catedral de São Basílio (<b>11 × 2 cm</b>), Kremlin (<b>7 × 2 cm</b>) e ~ Rio Moscou ~ (<b>8 × 2 cm</b>).',
+        'Escreva os nomes em branco. Faça a lápis antes e confira os acentos: <b>São Basílio</b>.',
+        'Suporte: dobre um pedacinho de papelão em “L” e cole atrás de cada plaquinha, para ficar em pé e um pouco inclinada.',
+        'Cole cada plaquinha na frente do seu prédio. A do rio fica em pé sobre a água, perto da borda da frente.',
+        'Letreiro: na borda da frente da caixa, escreva <b>— Moscou —</b> com letras de EVA branco de <b>3,5 cm</b>, bem no centro.',
+        'Bandeiras: 2 bandeirinhas de <b>6,5 × 4 cm</b> (3 faixas de <b>1,3 cm</b>: branco, azul e vermelho), uma de cada lado do letreiro.'
+      ],
+      tip: 'Antes de colar as letras do letreiro, marque o centro da borda (30 cm) e distribua as letras a partir dele.',
+      pin: [0, 5.4, -3], view: [0.1, 0.55, 1]
+    }
+  ];
+
+  var SHOP = [
+    { g: 'Papelão', items: [P('1 caixa grande (de mudança ou de mercado)'), P('6 rolos de papel higiênico e 1 de papel-toalha'), P('1 caixa de leite longa-vida vazia e limpa')] },
+    { g: 'EVA (folha de 40 × 60 cm)', items: [E(C.preto, 'Preto: 3 folhas'), E(C.vermelho, 'Vermelho: 4 folhas'), E(C.cinza, 'Cinza: 3 folhas'), E(C.verde, 'Verde: 2 folhas'), E(C.branco, 'Branco: 2 folhas'), E(C.azul, 'Azul: 1 folha'), E(C.bege, 'Bege ou creme: 1 folha'), E(C.amarelo, 'Amarelo e marrom: retalhos')] },
+    { g: 'Massinha', items: [K('#3F9A4C', 'Verde em 2 tons (bastante, para 14 árvores)'), K(C.marrom, 'Marrom'), K(C.branco, 'Branca'), K(C.azul, 'Azul'), K(C.amarelo, 'Amarela'), K(C.vermelho, 'Vermelha'), K(C.preto, 'Preta')] },
+    { g: 'Colas e ferramentas', items: [T('Cola branca (tubo grande) ou cola de EVA'), T('Cola quente, só com um adulto (ajuda muito nas torres)'), T('Tesoura, régua de 30 cm, lápis e borracha'), T('Estilete, só com um adulto'), T('Fita crepe, palitos de dente e de churrasco'), T('Caneta preta e caneta ou corretivo branco'), T('Um copo, para riscar os arcos da ponte')] }
+  ];
+
+  var ICON = {
+    grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>',
+    scissors: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg>',
+    alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
+    right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+    chev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>'
+  };
+
+  var BY_ID = {};
+  PARTS.forEach(function (p, i) { p.i = i; BY_ID[p.id] = p; });
+
+  /* =========================================================
+     Progresso (fica salvo só neste navegador)
+     ========================================================= */
+  var KEY = 'maquete-moscou-v1';
+  var progress = {};
+  try { progress = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { progress = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(progress)); } catch (e) { /* sem armazenamento */ } }
+  var TOTAL = PARTS.reduce(function (a, p) { return a + p.steps.length; }, 0);
+  function doneOf(p) { var d = progress[p.id] || []; return p.steps.reduce(function (a, _, k) { return a + (d[k] ? 1 : 0); }, 0); }
+  function isDone(p) { return doneOf(p) === p.steps.length; }
+  function fmtMin(m) { var h = Math.floor(m / 60), r = m % 60; return h ? (r ? h + ' h ' + r + ' min' : h + ' h') : r + ' min'; }
+  function lvlKey(l) { return l === 'Fácil' ? 'facil' : (l === 'Médio' ? 'medio' : 'dificil'); }
+
+  /* =========================================================
+     Painel
+     ========================================================= */
+  var stepper = document.getElementById('stepper');
+  var content = document.getElementById('content');
+  var panel = document.getElementById('panel');
+  var current = 'geral';
+  var sceneApi = null;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  stepper.innerHTML =
+    '<button class="chip" type="button" data-go="geral"><span class="n">' + ICON.grid + '</span>Visão geral</button>' +
+    PARTS.map(function (p, i) {
+      return '<button class="chip" type="button" data-go="' + p.id + '"><span class="n">' + (i + 1) + '</span>' + p.tab + '</button>';
+    }).join('');
+
+  function matLI(m) {
+    return '<li><span class="sw sw-' + m.k + '" style="--sw:' + (m.c || 'transparent') + '" aria-hidden="true"></span><span>' + m.t + '</span></li>';
+  }
+
+  function overviewHTML() {
+    var total = PARTS.reduce(function (a, p) { return a + p.min; }, 0);
+    var days = [
+      [0, 3, 'Base, painel, chão e rio. Deixe a cola da água secando de um dia para o outro.'],
+      [4, 6, 'Avenida, ponte, Teatro Bolshoi e Catedral de São Basílio.'],
+      [7, 10, 'Kremlin, árvores, barco, carros e plaquinhas.']
+    ];
+    return '' +
+      '<div class="eyebrow"><span>Antes de começar</span></div>' +
+      '<h2>Como montar a maquete</h2>' +
+      '<p class="lead">Toque numa peça do modelo 3D, num número ou numa etapa aqui em cima para ver o passo a passo. As etapas já estão na ordem de montagem.</p>' +
+      '<dl class="facts">' +
+        '<div><dt>Base</dt><dd>60 × 40 cm</dd></div>' +
+        '<div><dt>Altura do painel</dt><dd>40 cm</dd></div>' +
+        '<div><dt>Tempo total</dt><dd>≈ ' + Math.round(total / 60) + ' h</dd></div>' +
+        '<div><dt>Etapas</dt><dd>' + PARTS.length + ' etapas, ' + TOTAL + ' passos</dd></div>' +
+      '</dl>' +
+      '<section><h3>Plano em 3 dias</h3><ol class="days">' +
+        days.map(function (d, i) {
+          var m = PARTS.slice(d[0], d[1] + 1).reduce(function (s, p) { return s + p.min; }, 0);
+          return '<li><div class="day-h"><strong>Dia ' + (i + 1) + '</strong><span>Etapas ' + (d[0] + 1) + ' a ' + (d[1] + 1) + ' · ' + fmtMin(m) + '</span></div><p>' + d[2] + '</p></li>';
+        }).join('') +
+      '</ol></section>' +
+      '<section><h3>Ordem de montagem</h3><ol class="order">' +
+        PARTS.map(function (p, i) {
+          return '<li><button type="button" class="order-row' + (isDone(p) ? ' is-done' : '') + '" data-go="' + p.id + '"><span class="n">' + (i + 1) + '</span><span class="nm">' + p.name + '</span><span class="tm">' + fmtMin(p.min) + '</span>' + ICON.chev + '</button></li>';
+        }).join('') +
+      '</ol></section>' +
+      '<section><h3>Lista de materiais</h3>' +
+        SHOP.map(function (grp) { return '<div class="shop"><h4>' + grp.g + '</h4><ul class="mats">' + grp.items.map(matLI).join('') + '</ul></div>'; }).join('') +
+      '</section>' +
+      '<aside class="tipbox"><span class="tiplabel">' + ICON.alert + ' Segurança</span><p>Estilete e cola quente só com um adulto por perto. Corte o papelão sempre sobre outro papelão, nunca direto na mesa.</p></aside>' +
+      '<div class="pager"><button class="btn btn-primary" type="button" data-go="base">Começar pela etapa 1 ' + ICON.right + '</button>' +
+      '<button class="btn btn-ghost" type="button" id="resetProg">Desmarcar todos os passos</button></div>';
+  }
+
+  function partHTML(p) {
+    var d = progress[p.id] || [];
+    var prev = p.i > 0 ? PARTS[p.i - 1] : null;
+    var next = p.i < PARTS.length - 1 ? PARTS[p.i + 1] : null;
+    return '' +
+      '<div class="eyebrow"><span>Etapa ' + (p.i + 1) + ' de ' + PARTS.length + '</span><span class="dot"></span><span>' + fmtMin(p.min) + '</span><span class="lvl lvl-' + lvlKey(p.level) + '">' + p.level + '</span></div>' +
+      '<h2>' + p.name + '</h2>' +
+      '<p class="lead">' + p.short + '</p>' +
+      '<ul class="tapes" aria-label="Medidas">' + p.dims.map(function (x) { return '<li class="tape">' + x + '</li>'; }).join('') + '</ul>' +
+      '<section><h3>Você vai usar</h3><ul class="mats">' + p.mats.map(matLI).join('') + '</ul></section>' +
+      '<section><div class="h3row"><h3>Passo a passo</h3><span class="count" id="count">' + doneOf(p) + ' de ' + p.steps.length + ' feitos</span></div>' +
+      '<ol class="steps">' + p.steps.map(function (s, k) {
+        return '<li><label class="step" for="st-' + p.id + '-' + k + '"><input type="checkbox" id="st-' + p.id + '-' + k + '" data-k="' + k + '"' + (d[k] ? ' checked' : '') + '><span class="num" aria-hidden="true">' + (k + 1) + '</span><span class="txt"><span class="sr">Passo ' + (k + 1) + ': </span>' + s + '</span></label></li>';
+      }).join('') + '</ol></section>' +
+      (p.tip ? '<aside class="tipbox"><span class="tiplabel">' + ICON.scissors + ' Dica</span><p>' + p.tip + '</p></aside>' : '') +
+      '<nav class="pager" aria-label="Navegar entre etapas">' +
+        (prev ? '<button class="btn" type="button" data-go="' + prev.id + '">' + ICON.left + ' ' + prev.tab + '</button>'
+              : '<button class="btn" type="button" data-go="geral">' + ICON.left + ' Visão geral</button>') +
+        (next ? '<button class="btn btn-primary next" type="button" data-go="' + next.id + '">Etapa ' + (next.i + 1) + ': ' + next.tab + ' ' + ICON.right + '</button>'
+              : '<button class="btn btn-primary next" type="button" data-go="geral">Maquete pronta! Ver resumo ' + ICON.right + '</button>') +
+      '</nav>';
+  }
+
+  function updateHeader() {
+    var done = PARTS.reduce(function (a, p) { return a + doneOf(p); }, 0);
+    document.getElementById('progFill').style.width = (done / TOTAL * 100).toFixed(1) + '%';
+    document.getElementById('progText').textContent = done + ' de ' + TOTAL + ' passos';
+  }
+
+  function updateChips() {
+    var active = null;
+    stepper.querySelectorAll('.chip').forEach(function (c) {
+      var id = c.dataset.go, on = id === current;
+      c.classList.toggle('is-active', on);
+      if (on) { c.setAttribute('aria-current', 'step'); active = c; } else { c.removeAttribute('aria-current'); }
+      if (BY_ID[id]) c.classList.toggle('is-done', isDone(BY_ID[id]));
+    });
+    if (active) {
+      var left = active.offsetLeft - stepper.clientWidth / 2 + active.offsetWidth / 2;
+      stepper.scrollTo({ left: Math.max(0, left), behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
+  }
+
+  function scrollToContent() {
+    var scrollable = getComputedStyle(panel).overflowY === 'auto' && panel.scrollHeight > panel.clientHeight;
+    if (scrollable) { panel.scrollTo({ top: 0, behavior: 'auto' }); return; }
+    var r = content.getBoundingClientRect();
+    if (r.top < 0) content.scrollIntoView({ block: 'start', behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  function go(id, opts) {
+    opts = opts || {};
+    if (id !== 'geral' && !BY_ID[id]) id = 'geral';
+    current = id;
+    content.innerHTML = id === 'geral' ? overviewHTML() : partHTML(BY_ID[id]);
+    updateChips();
+    if (sceneApi) sceneApi.select(id);
+    if (opts.scroll !== false) scrollToContent();
+  }
+
+  stepper.addEventListener('click', function (e) { var b = e.target.closest('[data-go]'); if (b) go(b.dataset.go); });
+  content.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-go]');
+    if (b) { go(b.dataset.go); return; }
+    var r = e.target.closest('#resetProg');
+    if (r) {
+      if (r.classList.contains('is-armed')) {
+        progress = {}; save(); updateHeader(); go('geral', { scroll: false });
+        if (sceneApi) sceneApi.refreshPins();
+      } else {
+        r.classList.add('is-armed'); r.textContent = 'Toque de novo para desmarcar tudo';
+        setTimeout(function () { if (r.isConnected) { r.classList.remove('is-armed'); r.textContent = 'Desmarcar todos os passos'; } }, 3500);
+      }
+    }
+  });
+  content.addEventListener('change', function (e) {
+    var cb = e.target;
+    if (!cb.matches('input[type="checkbox"][data-k]') || !BY_ID[current]) return;
+    var p = BY_ID[current];
+    var arr = (progress[p.id] || []).slice();
+    arr[+cb.dataset.k] = cb.checked;
+    progress[p.id] = arr; save();
+    var c = document.getElementById('count');
+    if (c) c.textContent = doneOf(p) + ' de ' + p.steps.length + ' feitos';
+    updateHeader(); updateChips();
+    if (sceneApi) sceneApi.refreshPins();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' && t.type !== 'checkbox' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    var order = ['geral'].concat(PARTS.map(function (p) { return p.id; }));
+    var i = order.indexOf(current);
+    if (e.key === 'ArrowRight' && i < order.length - 1) { go(order[i + 1]); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft' && i > 0) { go(order[i - 1]); e.preventDefault(); }
+    else if (e.key === 'Escape' && current !== 'geral') { go('geral'); }
+  });
+
+  var startId = (location.hash || '').replace('#', '');
+  go(BY_ID[startId] ? startId : 'geral', { scroll: false });
+  updateHeader();
+
+  /* =========================================================
+     Cena 3D
+     ========================================================= */
+  function fontsReady() {
+    if (!document.fonts || !document.fonts.load) return Promise.resolve();
+    var loads = Promise.all([
+      document.fonts.load('800 60px "Bricolage Grotesque"'),
+      document.fonts.load('40px "Patrick Hand"')
+    ]).catch(function () {});
+    return Promise.race([loads, new Promise(function (r) { setTimeout(r, 2500); })]);
+  }
+
+  function initScene() {
+    if (!window.THREE || !THREE.OrbitControls) throw new Error('Biblioteca 3D não carregou');
+    var V3 = THREE.Vector3;
+    var viewer = document.getElementById('viewer');
+    var canvas = document.getElementById('scene');
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setClearColor(0x000000, 0);
+    var aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(38, 1, 0.5, 800);
+    var controls = new THREE.OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 10;
+    controls.maxDistance = 240;
+    controls.maxPolarAngle = Math.PI * 0.49;
+    controls.autoRotateSpeed = 0.9;
+    controls.screenSpacePanning = true;
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x6f6456, 0.75));
+    var sun = new THREE.DirectionalLight(0xffffff, 0.95);
+    sun.position.set(-35, 70, 45);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    var sc = sun.shadow.camera;
+    sc.left = -58; sc.right = 58; sc.top = 58; sc.bottom = -58; sc.near = 1; sc.far = 220;
+    sun.shadow.bias = -0.0004;
+    sun.shadow.normalBias = 0.03;
+    scene.add(sun);
+    var fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(40, 30, 60);
+    scene.add(fillLight);
+
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.ShadowMaterial({ opacity: 0.3 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -1.02;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    /* ---------- utilitários ---------- */
+    function makeTex(w, h, draw, rep) {
+      var c = document.createElement('canvas'); c.width = w; c.height = h;
+      var g = c.getContext('2d'); draw(g, w, h);
+      var t = new THREE.CanvasTexture(c);
+      t.encoding = THREE.sRGBEncoding; t.anisotropy = aniso;
+      if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); }
+      return t;
+    }
+    function M(hex, o) {
+      var m = new THREE.MeshStandardMaterial(Object.assign({ color: hex, roughness: 0.9, metalness: 0 }, o || {}));
+      m.color.convertSRGBToLinear();
+      if (o && o.emissive) m.emissive.convertSRGBToLinear();
+      return m;
+    }
+    function box(w, h, d) { return new THREE.BoxGeometry(w, h, d); }
+    function put(parent, geo, mat, x, y, z) {
+      var m = new THREE.Mesh(geo, mat); m.position.set(x || 0, y || 0, z || 0); parent.add(m); return m;
+    }
+    // Forma no plano do chão: pontos (x, z) → Shape em (x, -z), extrudada para cima
+    function flatShape(pts) {
+      var s = new THREE.Shape();
+      pts.forEach(function (p, i) { if (i) s.lineTo(p[0], -p[1]); else s.moveTo(p[0], -p[1]); });
+      return s;
+    }
+    function slab(shape, y0, h, mat) {
+      var g = new THREE.ExtrudeGeometry(shape, { depth: h, bevelEnabled: false, curveSegments: 16 });
+      g.rotateX(-Math.PI / 2);
+      var m = new THREE.Mesh(g, mat); m.position.y = y0; return m;
+    }
+    function rrect(x0, z0, x1, z1, r) {
+      var s = new THREE.Shape(), a = x0, b = -z1, c = x1, d = -z0;
+      s.moveTo(a + r, b); s.lineTo(c - r, b); s.quadraticCurveTo(c, b, c, b + r);
+      s.lineTo(c, d - r); s.quadraticCurveTo(c, d, c - r, d);
+      s.lineTo(a + r, d); s.quadraticCurveTo(a, d, a, d - r);
+      s.lineTo(a, b + r); s.quadraticCurveTo(a, b, a + r, b);
+      return s;
+    }
+    function prism(w, h, depth, capMat, sideMat) {
+      var s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(0, h); s.lineTo(-w / 2, 0);
+      return new THREE.Mesh(new THREE.ExtrudeGeometry(s, { depth: depth, bevelEnabled: false }), [capMat, sideMat]);
+    }
+    function speckle(g, w, h, n, a) {
+      for (var i = 0; i < n; i++) { g.fillStyle = 'rgba(255,255,255,' + (Math.random() * a).toFixed(3) + ')'; g.fillRect(Math.random() * w, Math.random() * h, 2, 2); }
+    }
+    function wrapText(g, text, x, y, maxW, lh) {
+      var words = text.split(' '), line = '';
+      for (var i = 0; i < words.length; i++) {
+        var test = line ? line + ' ' + words[i] : words[i];
+        if (g.measureText(test).width > maxW && line) { g.fillText(line, x, y); line = words[i]; y += lh; }
+        else line = test;
+      }
+      if (line) g.fillText(line, x, y);
+      return y;
+    }
+    var HAND = '"Patrick Hand", "Comic Sans MS", cursive';
+    var DISPLAY = '"Bricolage Grotesque", Arial, sans-serif';
+
+    /* ---------- traçados principais (cm) ---------- */
+    // Margem do rio: da lateral esquerda até a borda da frente
+    var bankCurve = new THREE.CatmullRomCurve3([
+      [-30, -1.2], [-22, -1.2], [-15.5, 1.5], [-12, 7.5], [-2, 9.5], [9, 11], [15, 15], [18.5, 20]
+    ].map(function (p) { return new V3(p[0], 0, p[1]); }), false, 'centripetal');
+    var bankPts = bankCurve.getSpacedPoints(64).map(function (v) { return [v.x, v.z]; });
+    var riverShape = flatShape(bankPts.concat([[-30, 20]]));
+    var landShape = flatShape([[-30, -20], [30, -20], [30, 20]].concat(bankPts.slice().reverse()));
+
+    // Avenida: linha do meio
+    var roadCurve = new THREE.CatmullRomCurve3([
+      [-29.9, 3.5], [-12, 3.5], [0, 5], [10, 7], [17, 10.5], [22, 15], [25.2, 20.2]
+    ].map(function (p) { return new V3(p[0], 0, p[1]); }), false, 'centripetal');
+    var ROAD_Y = 2.45, LAND_Y = 2.2;
+
+    function ribbon(curve, off, w, y, segs, mat) {
+      var pos = [], uv = [], idx = [], len = curve.getLength();
+      for (var i = 0; i <= segs; i++) {
+        var u = i / segs, p = curve.getPointAt(u), t = curve.getTangentAt(u);
+        var nx = t.z, nz = -t.x, a = off + w / 2, b = off - w / 2;
+        pos.push(p.x + nx * a, y, p.z + nz * a, p.x + nx * b, y, p.z + nz * b);
+        uv.push(0, u * len / 5, 1, u * len / 5);
+        if (i < segs) { var k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
+      }
+      var g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx); g.computeVertexNormals();
+      return new THREE.Mesh(g, mat);
+    }
+    function wallStrip(pts, y0, y1, off, mat) {
+      var pos = [], uv = [], idx = [], s = 0;
+      for (var i = 0; i < pts.length; i++) {
+        var pa = pts[Math.max(0, i - 1)], pb = pts[Math.min(pts.length - 1, i + 1)];
+        var tx = pb[0] - pa[0], tz = pb[1] - pa[1], l = Math.hypot(tx, tz) || 1; tx /= l; tz /= l;
+        var px = pts[i][0] - tz * off, pz = pts[i][1] + tx * off;
+        if (i > 0) s += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+        pos.push(px, y0, pz, px, y1, pz); uv.push(s / 4, 0, s / 4, 1);
+        if (i < pts.length - 1) { var k = i * 2; idx.push(k, k + 2, k + 1, k + 1, k + 2, k + 3); }
+      }
+      var g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx); g.computeVertexNormals();
+      return new THREE.Mesh(g, mat);
+    }
+
+    /* ---------- texturas desenhadas ---------- */
+    var paveTex = makeTex(128, 128, function (g, w, h) {
+      g.fillStyle = '#A9AEB2'; g.fillRect(0, 0, w, h); speckle(g, w, h, 900, 0.12);
+      g.strokeStyle = '#868C92'; g.lineWidth = 3;
+      [1.5, 64].forEach(function (p) { g.beginPath(); g.moveTo(p, 0); g.lineTo(p, h); g.stroke(); g.beginPath(); g.moveTo(0, p); g.lineTo(w, p); g.stroke(); });
+    }, [1 / 6, 1 / 6]);
+    var waterTex = makeTex(256, 256, function (g, w, h) {
+      g.fillStyle = '#2C7BD3'; g.fillRect(0, 0, w, h);
+      g.strokeStyle = 'rgba(175,218,255,.6)'; g.lineWidth = 3; g.lineCap = 'round';
+      for (var i = 0; i < 46; i++) {
+        var x = Math.random() * (w - 40), y = 10 + Math.random() * (h - 20);
+        g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 10, y - 6, x + 20, y); g.quadraticCurveTo(x + 30, y + 6, x + 40, y); g.stroke();
+      }
+    }, [1 / 12, 1 / 12]);
+    function brickDraw(g, w, h) {
+      g.fillStyle = '#A3A8AD'; g.fillRect(0, 0, w, h); speckle(g, w, h, 300, 0.12);
+      g.strokeStyle = '#7B828A'; g.lineWidth = 2;
+      for (var r = 0; r < 4; r++) {
+        g.beginPath(); g.moveTo(0, r * 16 + 1); g.lineTo(w, r * 16 + 1); g.stroke();
+        for (var x = (r % 2) * 16; x < w; x += 32) { g.beginPath(); g.moveTo(x, r * 16); g.lineTo(x, r * 16 + 16); g.stroke(); }
+      }
+    }
+    var brickTex = makeTex(128, 64, brickDraw, [1, 1]);
+    var brickTex2 = makeTex(128, 64, brickDraw, [1 / 4, 1 / 1.95]);
+
+    function spiralTex(bg, fg, dir, n) {
+      return makeTex(256, 256, function (g, w, h) {
+        g.fillStyle = bg; g.fillRect(0, 0, w, h); g.fillStyle = fg;
+        var p = w / n, sw = p * 0.42;
+        for (var i = -n; i <= 2 * n; i++) {
+          var x = i * p; g.beginPath();
+          if (dir > 0) { g.moveTo(x, h); g.lineTo(x + sw, h); g.lineTo(x + sw + w * 0.5, 0); g.lineTo(x + w * 0.5, 0); }
+          else { g.moveTo(x, 0); g.lineTo(x + sw, 0); g.lineTo(x + sw + w * 0.5, h); g.lineTo(x + w * 0.5, h); }
+          g.closePath(); g.fill();
+        }
+      });
+    }
+    function zigTex(bg, fg, rows, lw) {
+      return makeTex(256, 256, function (g, w, h) {
+        g.fillStyle = bg; g.fillRect(0, 0, w, h);
+        g.strokeStyle = fg; g.lineWidth = lw; g.lineJoin = 'miter';
+        for (var r = 0; r < rows; r++) {
+          var y = (r + 0.5) * h / rows; g.beginPath();
+          for (var x = 0; x <= w; x += 16) g.lineTo(x, y + ((x / 16) % 2 ? -8 : 8));
+          g.stroke();
+        }
+      });
+    }
+    function ribTex(bg, fg) {
+      return makeTex(256, 64, function (g, w, h) {
+        g.fillStyle = bg; g.fillRect(0, 0, w, h); g.fillStyle = fg;
+        for (var x = 0; x < w; x += 32) g.fillRect(x, 0, 5, h);
+      });
+    }
+
+    // Painel de fundo: 61,2 × 41,5 cm, 25 px por cm
+    function backdropTex() {
+      var S = 25, W = Math.round(61.2 * S), H = Math.round(41.5 * S);
+      function X(x) { return (x + 30.6) * S; }
+      function Y(y) { return (40.5 - y) * S; }
+      return makeTex(W, H, function (g) {
+        g.fillStyle = '#17181C'; g.fillRect(0, 0, W, H); speckle(g, W, H, 6000, 0.04);
+        // bandeira
+        var fx = X(-28), fy = Y(38.5), fw = 10 * S, fh = 6.5 * S;
+        ['#F4F4F2', '#1F56B5', '#D02B2F'].forEach(function (c, i) { g.fillStyle = c; g.fillRect(fx, fy + i * fh / 3, fw, fh / 3 + 0.5); });
+        // título
+        g.fillStyle = '#F4F4F2'; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+        var fs = 5 * S; g.font = '800 ' + fs + 'px ' + DISPLAY;
+        var tw = g.measureText('RÚSSIA').width, maxW = 15 * S;
+        if (tw > maxW) { fs *= maxW / tw; g.font = '800 ' + fs + 'px ' + DISPLAY; }
+        g.fillText('RÚSSIA', X(-8.5), Y(32.6));
+        g.font = (2.1 * S) + 'px ' + HAND; g.fillText('— Moscou —', X(-8.5), Y(29.4));
+        // quadros de texto
+        function card(x0, yTop, w, h, deg, draw) {
+          g.save(); g.translate(X(x0) + w * S / 2, Y(yTop) + h * S / 2); g.rotate(deg * Math.PI / 180);
+          g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(-w * S / 2 + 5, -h * S / 2 + 6, w * S, h * S);
+          g.fillStyle = '#F7F5EF'; g.fillRect(-w * S / 2, -h * S / 2, w * S, h * S);
+          g.translate(-w * S / 2, -h * S / 2); draw(); g.restore();
+        }
+        card(-27.5, 27.5, 17, 11, -0.6, function () {
+          g.fillStyle = '#23252A'; g.textAlign = 'left'; g.font = (1.05 * S) + 'px ' + HAND;
+          wrapText(g, 'Moscou é a capital da Rússia e uma das maiores cidades do mundo. É conhecida por sua história, cultura, arquitetura e por ser o centro político, econômico e cultural do país.', 0.9 * S, 1.9 * S, 15.2 * S, 1.5 * S);
+        });
+        card(1.5, 38.5, 17, 11, 0.5, function () {
+          g.fillStyle = '#23252A'; g.textAlign = 'left'; g.font = (1.12 * S) + 'px ' + HAND;
+          g.fillText('Pontos turísticos de Moscou:', 0.9 * S, 1.9 * S);
+          g.font = (1.05 * S) + 'px ' + HAND;
+          ['Praça Vermelha', 'Kremlin', 'Catedral de São Basílio', 'Teatro Bolshoi', 'Museu Histórico Estatal'].forEach(function (t, i) {
+            var y = (3.6 + i * 1.5) * S;
+            g.beginPath(); g.arc(1.4 * S, y - 0.32 * S, 0.14 * S, 0, Math.PI * 2); g.fill();
+            g.fillText(t, 1.9 * S, y);
+          });
+        });
+        // mapa da Rússia (contorno simplificado)
+        var shape = [[.03, .58], [.02, .46], [.05, .38], [.03, .30], [.07, .24], [.10, .14], [.14, .10], [.17, .16], [.15, .22], [.21, .24], [.25, .18], [.29, .22], [.33, .14], [.36, .20], [.40, .12], [.43, .20], [.47, .10], [.52, .06], [.57, .03], [.62, .09], [.66, .14], [.71, .12], [.76, .16], [.82, .14], [.88, .17], [.94, .20], [.99, .26], [.95, .31], [.90, .30], [.87, .36], [.91, .42], [.89, .56], [.85, .62], [.83, .50], [.80, .44], [.76, .50], [.74, .60], [.77, .70], [.75, .82], [.71, .88], [.68, .78], [.63, .70], [.56, .72], [.50, .66], [.43, .70], [.36, .66], [.30, .72], [.24, .68], [.20, .74], [.14, .70], [.10, .80], [.07, .72], [.05, .66]];
+        var mx = X(18.6), my = Y(37.4), mw = 11 * S, mh = 6.2 * S;
+        g.lineJoin = 'round'; g.lineCap = 'round';
+        [[0, 0, 'rgba(255,255,255,.92)', 3], [1.5, 1, 'rgba(255,255,255,.3)', 2]].forEach(function (st) {
+          g.strokeStyle = st[2]; g.lineWidth = st[3]; g.beginPath();
+          shape.forEach(function (p, i) { var x = mx + p[0] * mw + st[0], y = my + p[1] * mh + st[1]; if (i) g.lineTo(x, y); else g.moveTo(x, y); });
+          g.closePath(); g.stroke();
+        });
+        var px = mx + 0.08 * mw, py = my + 0.52 * mh;
+        g.fillStyle = '#E0303A'; g.beginPath(); g.arc(px, py - 0.75 * S, 0.42 * S, Math.PI, 0);
+        g.lineTo(px, py); g.closePath(); g.fill();
+        g.fillStyle = '#FFFFFF'; g.beginPath(); g.arc(px, py - 0.75 * S, 0.16 * S, 0, Math.PI * 2); g.fill();
+        g.font = (1.05 * S) + 'px ' + HAND; g.textAlign = 'left'; g.fillText('Moscou', px + 0.7 * S, py - 0.35 * S);
+      });
+    }
+    // Letreiro da frente: 61,2 × 5 cm, 40 px por cm
+    function signTex() {
+      var S = 40, W = Math.round(61.2 * S), H = 5 * S;
+      return makeTex(W, H, function (g) {
+        g.fillStyle = '#17181C'; g.fillRect(0, 0, W, H); speckle(g, W, H, 3000, 0.04);
+        var cx = W / 2;
+        g.fillStyle = '#F4F4F2'; g.font = (3.5 * S) + 'px ' + HAND; g.textAlign = 'center'; g.textBaseline = 'middle';
+        g.fillText('Moscou', cx, H / 2 + 6);
+        var tw = g.measureText('Moscou').width;
+        g.strokeStyle = '#F4F4F2'; g.lineWidth = 6; g.lineCap = 'round';
+        [-1, 1].forEach(function (s) {
+          g.beginPath(); g.moveTo(cx + s * (tw / 2 + 1.5 * S), H / 2 + 4); g.lineTo(cx + s * (tw / 2 + 4.5 * S), H / 2 + 4); g.stroke();
+          var fx = cx + s * 17 * S - 3.25 * S, fy = 0.5 * S;
+          ['#F4F4F2', '#1F56B5', '#D02B2F'].forEach(function (c, i) { g.fillStyle = c; g.fillRect(fx, fy + i * 1.333 * S, 6.5 * S, 1.333 * S + 0.5); });
+        });
+      });
+    }
+    function plaqueTex(text, wcm) {
+      var W = Math.round(wcm * 64), H = 128;
+      return makeTex(W, H, function (g) {
+        g.fillStyle = '#141518'; g.fillRect(0, 0, W, H);
+        g.strokeStyle = 'rgba(255,255,255,.16)'; g.lineWidth = 3; g.strokeRect(7, 7, W - 14, H - 14);
+        var fs = 66; g.font = fs + 'px ' + HAND;
+        var tw = g.measureText(text).width; if (tw > W - 44) { fs *= (W - 44) / tw; g.font = fs + 'px ' + HAND; }
+        g.fillStyle = '#F4F4F2'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, W / 2, H / 2 + 4);
+      });
+    }
+
+    /* =========================================================
+       Peças
+       ========================================================= */
+    var partGroups = {}, partMats = {}, pickables = [];
+    function register(id, group) {
+      scene.add(group); partGroups[id] = group;
+      var mats = [];
+      group.traverse(function (o) {
+        if (!o.isMesh) return;
+        o.userData.part = id; o.castShadow = true; o.receiveShadow = true; pickables.push(o);
+        (Array.isArray(o.material) ? o.material : [o.material]).forEach(function (m) {
+          if (mats.indexOf(m) < 0) { mats.push(m); m.userData.e0 = m.emissive.clone(); m.userData.ei0 = m.emissiveIntensity; }
+        });
+      });
+      partMats[id] = mats;
+    }
+
+    // 1. Base
+    (function () {
+      var g = new THREE.Group(), kraft = M('#B88A57'), black = M('#1D1E22');
+      put(g, box(61.2, 1, 41.2), kraft, 0, -0.5, 0);
+      put(g, box(61.2, 5, 0.6), black, 0, 1.5, 20.3);
+      put(g, box(0.6, 5, 40.6), black, -30.3, 1.5, 0);
+      put(g, box(0.6, 5, 40.6), black, 30.3, 1.5, 0);
+      register('base', g);
+    })();
+
+    // 2. Painel
+    (function () {
+      var g = new THREE.Group(), black = M('#1B1C20'), kraft = M('#B88A57');
+      var face = M('#FFFFFF', { map: backdropTex(), roughness: 0.95 });
+      put(g, box(61.2, 41.5, 0.8), [black, black, black, black, face, black], 0, 19.75, -20.4);
+      var tri = new THREE.Shape(); tri.moveTo(0, 0); tri.lineTo(15, 0); tri.lineTo(0, 20); tri.lineTo(0, 0);
+      var tg = new THREE.ExtrudeGeometry(tri, { depth: 0.6, bevelEnabled: false });
+      [-18, 18].forEach(function (x) { var m = put(g, tg, kraft, x - 0.3, -1, -20.8); m.rotation.y = Math.PI / 2; });
+      register('painel', g);
+    })();
+
+    // 3. Chão
+    var backEdge = [];
+    (function () {
+      var n = 90;
+      for (var i = 0; i <= n; i++) {
+        var u = i / n, p = roadCurve.getPointAt(u), t = roadCurve.getTangentAt(u);
+        backEdge.push([Math.min(30, p.x + t.z * 1.5), Math.min(20, p.z - t.x * 1.5)]);
+      }
+    })();
+    (function () {
+      var g = new THREE.Group();
+      g.add(slab(landShape, 0, 2.0, M('#B88A57')));
+      g.add(slab(landShape, 2.0, 0.2, M('#FFFFFF', { map: paveTex })));
+      var grass = M('#3F9A4C');
+      var edge = backEdge.filter(function (p) { return p[0] >= 14; }).reverse();
+      g.add(slab(flatShape([[14, 1.5], [30, 1.5], [30, 20]].concat(edge)), LAND_Y, 0.15, grass));
+      g.add(slab(rrect(-30, -7, -21, -1.6, 1.2), LAND_Y, 0.15, grass));
+      register('chao', g);
+    })();
+
+    // 4. Rio
+    (function () {
+      var g = new THREE.Group();
+      g.add(slab(riverShape, 0, 0.25, M('#FFFFFF', { map: waterTex, roughness: 0.32, metalness: 0.05 })));
+      g.add(wallStrip(bankPts, 0.25, LAND_Y, 0.06, M('#FFFFFF', { map: brickTex, side: THREE.DoubleSide })));
+      register('rio', g);
+    })();
+
+    // 5. Avenida e ponte
+    (function () {
+      var g = new THREE.Group();
+      var asphalt = M('#2B2D31', { side: THREE.DoubleSide, roughness: 0.95 });
+      var white = M('#F2F2EE', { side: THREE.DoubleSide });
+      var stone = M('#FFFFFF', { map: brickTex2 });
+      var gray = M('#A9AEB3');
+      g.add(ribbon(roadCurve, 0, 5, ROAD_Y, 120, asphalt));
+      g.add(ribbon(roadCurve, 2.1, 0.22, ROAD_Y + 0.02, 120, white));
+      g.add(ribbon(roadCurve, -2.1, 0.22, ROAD_Y + 0.02, 120, white));
+      var len = roadCurve.getLength(), n = Math.floor(len / 2), dash = box(1.2, 0.05, 0.24);
+      for (var i = 0; i < n; i++) {
+        var u = (i + 0.5) / n, p = roadCurve.getPointAt(u), t = roadCurve.getTangentAt(u);
+        var d = put(g, dash, white, p.x, ROAD_Y + 0.03, p.z); d.rotation.y = Math.atan2(-t.z, t.x);
+      }
+      // ponte com 3 arcos
+      var x0 = -29.7, x1 = -11, h = 1.95;
+      var s = new THREE.Shape(); s.moveTo(x0, 0); s.lineTo(x0, h); s.lineTo(x1, h); s.lineTo(x1, 0);
+      [-14.5, -20.4, -26.3].forEach(function (cx) { s.lineTo(cx + 2.25, 0); s.absellipse(cx, 0, 2.25, 1.45, 0, Math.PI, false); });
+      s.lineTo(x0, 0);
+      var fg = new THREE.ExtrudeGeometry(s, { depth: 0.3, bevelEnabled: false, curveSegments: 18 });
+      put(g, fg, stone, 0, 0.25, 0.2);
+      put(g, fg, stone, 0, 0.25, 6.5);
+      put(g, box(18.7, 0.4, 6), gray, (x0 + x1) / 2, 2.0, 3.5);
+      put(g, box(18.7, 0.55, 0.25), gray, (x0 + x1) / 2, 2.47, 0.63);
+      put(g, box(18.7, 0.55, 0.25), gray, (x0 + x1) / 2, 2.47, 6.37);
+      register('avenida', g);
+    })();
+
+    // 6. Teatro Bolshoi
+    (function () {
+      var g = new THREE.Group();
+      var cream = M('#EADBBD'), col = M('#F6F1E6'), green = M('#2E7D4F'), greenD = M('#246640'), brown = M('#6B4A2E'), dark = M('#3A2F27');
+      var cx = -18;
+      put(g, box(16, 7, 9), cream, cx, LAND_Y + 3.5, -12.5);
+      var roof = prism(17, 3.6, 9.6, cream, green); roof.position.set(cx, LAND_Y + 7, -17.3); g.add(roof);
+      var slope = Math.atan2(3.6, 8.5);
+      [-1, 1].forEach(function (sd) {
+        for (var k = 1; k <= 4; k++) {
+          var f = k / 5;
+          var ln = put(g, box(0.1, 0.1, 9.62), greenD, cx + sd * 8.5 * (1 - f) + sd * 0.03, LAND_Y + 7 + 3.6 * f + 0.05, -12.5);
+          ln.rotation.z = -sd * slope;
+        }
+      });
+      // janelas laterais
+      var win = box(0.1, 1.4, 0.9);
+      [-1, 1].forEach(function (sd) {
+        for (var r = 0; r < 2; r++) for (var c = 0; c < 4; c++) put(g, win, brown, cx + sd * 8.03, LAND_Y + 2.1 + r * 2.6, -16 + c * 2.1);
+      });
+      // pórtico
+      put(g, box(13.5, 0.7, 3.6), cream, cx, LAND_Y + 0.35, -6.2);
+      var colG = new THREE.CylinderGeometry(0.38, 0.42, 5.2, 14);
+      for (var i = 0; i < 8; i++) put(g, colG, col, cx - 6 + i * (12 / 7), LAND_Y + 0.7 + 2.6, -5.0);
+      var door = box(1.2, 2.4, 0.08);
+      [-3.4, 0, 3.4].forEach(function (dx) { put(g, door, brown, cx + dx, LAND_Y + 0.7 + 1.2, -7.95); });
+      put(g, box(13.5, 0.7, 3.8), cream, cx, LAND_Y + 0.7 + 5.2 + 0.35, -6.1);
+      var ped = prism(13.5, 2.6, 3.8, cream, green); ped.position.set(cx, LAND_Y + 6.6, -8); g.add(ped);
+      var emb = put(g, new THREE.CircleGeometry(0.6, 20), dark, cx, LAND_Y + 7.4, -4.18); emb.scale.x = 1.7;
+      // carruagem com cavalos no topo
+      var q = new THREE.Group(); q.position.set(cx, LAND_Y + 9.2, -4.9); g.add(q);
+      put(q, box(2.2, 0.35, 0.9), dark, 0, 0.18, 0);
+      for (var hk = 0; hk < 4; hk++) put(q, box(0.28, 0.85, 0.7), dark, -0.75 + hk * 0.5, 0.78, 0.1);
+      put(q, box(0.5, 1.1, 0.45), dark, 0, 0.9, -0.35);
+      register('bolshoi', g);
+    })();
+
+    // 7. Catedral de São Basílio
+    (function () {
+      var g = new THREE.Group();
+      var red = M('#C8283C'), redD = M('#8E1B2B'), white = M('#F4F1EA');
+      var gold = M('#D8A93A', { metalness: 0.35, roughness: 0.45 });
+      var bz = -10.5;
+      put(g, box(13, 4, 10), red, 0, LAND_Y + 2, bz);
+      put(g, box(13.3, 0.35, 10.3), white, 0, LAND_Y + 4.15, bz);
+      put(g, box(13.2, 0.3, 10.2), white, 0, LAND_Y + 0.15, bz);
+      var fr = box(1.0, 1.7, 0.08), inr = box(0.55, 1.1, 0.08);
+      for (var i = 0; i < 6; i++) { var x = -5 + i * 2; put(g, fr, white, x, LAND_Y + 2.1, bz + 5.04); put(g, inr, redD, x, LAND_Y + 2.0, bz + 5.09); }
+      for (var j = 0; j < 4; j++) { var z = bz - 3.6 + j * 2.4; [-1, 1].forEach(function (sd) { var f = put(g, fr, white, sd * 6.54, LAND_Y + 2.1, z); f.rotation.y = Math.PI / 2; }); }
+
+      var topY = LAND_Y + 4.3;
+      function onionGeo(r, h) {
+        var prof = [[0, 0], [0.95, 0.02], [1.22, 0.18], [1.32, 0.36], [1.18, 0.55], [0.8, 0.72], [0.42, 0.86], [0.16, 0.95], [0.04, 1]];
+        var pts = new THREE.SplineCurve(prof.map(function (p) { return new THREE.Vector2(p[0] * r, p[1] * h); })).getPoints(30);
+        pts.forEach(function (p) { p.x = Math.max(0, p.x); });
+        pts.push(new THREE.Vector2(0, h * 1.03));
+        return new THREE.LatheGeometry(pts, 24);
+      }
+      function cross(parent, y, s) {
+        put(parent, box(0.1 * s, 1.2 * s, 0.1 * s), gold, 0, y + 0.6 * s, 0);
+        put(parent, box(0.6 * s, 0.1 * s, 0.1 * s), gold, 0, y + 0.8 * s, 0);
+      }
+      function tower(x, z, r, h, domeMat) {
+        var t = new THREE.Group(); t.position.set(x, topY, z); g.add(t);
+        put(t, new THREE.CylinderGeometry(r, r, h, 16), red, 0, h / 2, 0);
+        put(t, new THREE.CylinderGeometry(r * 1.07, r * 1.07, 0.25, 16), white, 0, h * 0.45, 0);
+        put(t, new THREE.CylinderGeometry(r * 1.1, r * 1.1, 0.32, 16), white, 0, h - 0.1, 0);
+        var wg = box(0.42, Math.min(0.9, h * 0.22), 0.08);
+        for (var k = 0; k < 4; k++) {
+          var a = k * Math.PI / 2 + Math.PI / 4;
+          var w = put(t, wg, white, Math.sin(a) * r, h * 0.7, Math.cos(a) * r); w.rotation.y = a;
+        }
+        var dh = r * 2.25;
+        put(t, onionGeo(r * 1.02, dh), domeMat, 0, h + 0.05, 0);
+        cross(t, h + dh * 1.02, Math.max(0.7, r / 1.5));
+      }
+      // torre central
+      var ct = new THREE.Group(); ct.position.set(0, topY, bz); g.add(ct);
+      put(ct, new THREE.CylinderGeometry(2.3, 2.3, 10, 8), red, 0, 5, 0);
+      [0.3, 5, 9.9].forEach(function (y) { put(ct, new THREE.CylinderGeometry(2.45, 2.45, 0.3, 8), white, 0, y, 0); });
+      var aw = box(0.6, 1.3, 0.08);
+      for (var k = 0; k < 8; k++) { var a = k * Math.PI / 4 + Math.PI / 8; var w = put(ct, aw, white, Math.sin(a) * 2.14, 7.3, Math.cos(a) * 2.14); w.rotation.y = a; }
+      var tentTex = zigTex('#CF3040', '#F4F1EA', 5, 5);
+      put(ct, new THREE.CylinderGeometry(0.05, 2.35, 6, 8, 1, true), M('#FFFFFF', { map: tentTex, side: THREE.DoubleSide }), 0, 13, 0);
+      put(ct, new THREE.CylinderGeometry(0.45, 0.45, 0.9, 12), red, 0, 16.3, 0);
+      put(ct, onionGeo(0.62, 1.5), gold, 0, 16.7, 0);
+      cross(ct, 18.25, 0.9);
+      // torres menores com cúpulas de cebola
+      tower(-4.2, bz - 2.7, 1.45, 7.5, M('#FFFFFF', { map: spiralTex('#2E8B45', '#F2C230', 1, 6), roughness: 0.6 }));
+      tower(-2.6, bz + 3.3, 1.6, 6.2, M('#FFFFFF', { map: spiralTex('#2360C4', '#F6F6F2', -1, 6), roughness: 0.6 }));
+      tower(4.0, bz - 2.5, 1.45, 8.0, M('#FFFFFF', { map: zigTex('#D23A3A', '#F6F6F2', 5, 7), roughness: 0.6 }));
+      tower(3.0, bz + 3.5, 1.2, 4.8, M('#FFFFFF', { map: ribTex('#F2C230', '#D9A21E'), roughness: 0.6 }));
+      tower(-5.3, bz + 4.1, 0.9, 3.0, M('#FFFFFF', { map: spiralTex('#3AA05A', '#F2C230', 1, 5), roughness: 0.6 }));
+      register('basilio', g);
+    })();
+
+    // 8. Kremlin e Torre Spasskaya
+    (function () {
+      var g = new THREE.Group();
+      var red = M('#C0302F'), white = M('#F4F1EA'), green = M('#2E7D4F'), black = M('#141414');
+      var gold = M('#E0B43A', { metalness: 0.35, roughness: 0.45 });
+      var star = M('#E0202E', { emissive: '#B0101C', emissiveIntensity: 0.35, roughness: 0.5 });
+      var wz = -14;
+      put(g, box(22.8, 6, 1.5), red, 18.4, LAND_Y + 3, wz);
+      var mer = new THREE.Shape(); mer.moveTo(0, 0); mer.lineTo(0.8, 0); mer.lineTo(0.8, 1.0); mer.lineTo(0.4, 0.65); mer.lineTo(0, 1.0); mer.lineTo(0, 0);
+      var merG = new THREE.ExtrudeGeometry(mer, { depth: 1.5, bevelEnabled: false });
+      [[10.3, 15.3], [21.8, 26.7]].forEach(function (rg) {
+        for (var x = rg[0]; x + 0.8 <= rg[1]; x += 1.4) put(g, merG, red, x, LAND_Y + 6, wz - 0.75);
+      });
+      // torre do relógio
+      var tx = 18.5, tz = -11;
+      put(g, box(6, 11, 5), red, tx, LAND_Y + 5.5, tz);
+      function arch(w, hRect) {
+        var s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, hRect); s.absarc(0, hRect, w / 2, 0, Math.PI, false); s.lineTo(-w / 2, 0);
+        return s;
+      }
+      put(g, new THREE.ExtrudeGeometry(arch(3.1, 2.9), { depth: 0.06, bevelEnabled: false, curveSegments: 16 }), white, tx, LAND_Y, tz + 2.5);
+      put(g, new THREE.ExtrudeGeometry(arch(2.5, 2.8), { depth: 0.12, bevelEnabled: false, curveSegments: 16 }), black, tx, LAND_Y, tz + 2.5);
+      var sw = box(0.6, 1.1, 0.08);
+      [-1.7, 1.7].forEach(function (dx) { put(g, sw, white, tx + dx, LAND_Y + 8.2, tz + 2.54); });
+      put(g, box(6.4, 0.4, 5.4), white, tx, LAND_Y + 11.2, tz);
+      [[-2.6, -2.1], [2.6, -2.1], [-2.6, 2.1], [2.6, 2.1]].forEach(function (c) {
+        put(g, box(0.75, 0.8, 0.75), red, tx + c[0], LAND_Y + 11.8, tz + c[1]);
+        put(g, new THREE.CylinderGeometry(0.02, 0.42, 1.5, 8), white, tx + c[0], LAND_Y + 12.95, tz + c[1]);
+      });
+      put(g, box(4.6, 4.4, 4.2), red, tx, LAND_Y + 11.4 + 2.2, tz);
+      // relógio
+      var clk = new THREE.Group(); clk.position.set(tx, LAND_Y + 13.7, tz + 2.1); g.add(clk);
+      var ring = put(clk, new THREE.CylinderGeometry(1.75, 1.75, 0.14, 36), gold, 0, 0, 0.07); ring.rotation.x = Math.PI / 2;
+      var face = put(clk, new THREE.CylinderGeometry(1.5, 1.5, 0.16, 36), black, 0, 0, 0.1); face.rotation.x = Math.PI / 2;
+      var tick = box(0.14, 0.14, 0.05);
+      for (var k = 0; k < 12; k++) { var a = k * Math.PI / 6; put(clk, tick, gold, Math.sin(a) * 1.25, Math.cos(a) * 1.25, 0.2); }
+      [[0.9, 0.14, Math.PI / 3], [1.3, 0.1, -Math.PI / 3]].forEach(function (hd) {
+        var hg = new THREE.Group(); hg.position.z = 0.22; hg.rotation.z = hd[2]; clk.add(hg);
+        put(hg, box(hd[1], hd[0], 0.05), gold, 0, hd[0] / 2, 0);
+      });
+      put(g, box(5, 0.35, 4.6), white, tx, LAND_Y + 15.975, tz);
+      put(g, new THREE.CylinderGeometry(1.9, 2.0, 3, 8), red, tx, LAND_Y + 17.65, tz);
+      var aw = box(0.55, 1.2, 0.08);
+      for (var m = 0; m < 8; m++) { var b = m * Math.PI / 4 + Math.PI / 8; var w = put(g, aw, white, tx + Math.sin(b) * 1.9, LAND_Y + 17.7, tz + Math.cos(b) * 1.9); w.rotation.y = b; }
+      put(g, new THREE.CylinderGeometry(2.15, 2.15, 0.3, 8), white, tx, LAND_Y + 19.3, tz);
+      put(g, new THREE.CylinderGeometry(0.02, 2.05, 8, 8), green, tx, LAND_Y + 23.45, tz);
+      put(g, new THREE.CylinderGeometry(0.07, 0.07, 1.2, 8), gold, tx, LAND_Y + 27.9, tz);
+      var ss = new THREE.Shape();
+      for (var p = 0; p < 10; p++) { var an = Math.PI / 2 + p * Math.PI / 5, rr = p % 2 ? 0.45 : 1.1; if (p) ss.lineTo(Math.cos(an) * rr, Math.sin(an) * rr); else ss.moveTo(Math.cos(an) * rr, Math.sin(an) * rr); }
+      ss.closePath();
+      var sg = new THREE.ExtrudeGeometry(ss, { depth: 0.25, bevelEnabled: false }); sg.translate(0, 0, -0.125);
+      put(g, sg, star, tx, LAND_Y + 29.4, tz);
+      // torres das pontas
+      [8.5, 28.3].forEach(function (x) {
+        put(g, box(3, 9, 3), red, x, LAND_Y + 4.5, wz);
+        put(g, box(3.3, 0.3, 3.3), white, x, LAND_Y + 9.15, wz);
+        var pyr = put(g, new THREE.CylinderGeometry(0.02, 2.2, 5, 4), green, x, LAND_Y + 11.8, wz); pyr.rotation.y = Math.PI / 4;
+        put(g, new THREE.CylinderGeometry(0.06, 0.06, 2.4, 6), gold, x, LAND_Y + 15.3, wz);
+        put(g, box(1.3, 0.8, 0.05), M('#D8202E'), x + 0.68, LAND_Y + 16.05, wz);
+      });
+      register('kremlin', g);
+    })();
+
+    // 9. Árvores
+    (function () {
+      var g = new THREE.Group();
+      var gA = M('#2F8A3E', { flatShading: true, roughness: 0.8 }), gB = M('#4AAE59', { flatShading: true, roughness: 0.8 });
+      var trunk = M('#7A4B2A');
+      function crownGeo(r, seed) {
+        var geo = new THREE.IcosahedronGeometry(r, 2), p = geo.attributes.position;
+        for (var i = 0; i < p.count; i++) {
+          var x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+          var d = 1 + 0.1 * Math.sin(x * 5.1 + seed) * Math.cos(y * 4.3 + z * 3.7 + seed * 1.3) + 0.05 * Math.sin(z * 9 + y * 7);
+          p.setXYZ(i, x * d, y * d, z * d);
+        }
+        geo.computeVertexNormals(); return geo;
+      }
+      var crowns = [crownGeo(1.3, 1), crownGeo(1.3, 2.7), crownGeo(1.3, 4.1)], small = crownGeo(0.85, 3.3);
+      var trunkG = new THREE.CylinderGeometry(0.28, 0.34, 1.8, 8);
+      var spots = [[6, 1.8], [11, 3], [15.5, 5.2], [21, 4], [24.5, 3], [27.5, 5.5], [26, 9.5], [28.5, 12.5], [28.2, 17], [-28, -5.5], [-24.5, -2.6], [-28, -2.4], [-8.2, -6.8], [-8.2, -3.6]];
+      spots.forEach(function (sp, i) {
+        var s = 0.86 + ((i * 37) % 10) / 30;
+        var t = new THREE.Group(); t.position.set(sp[0], LAND_Y, sp[1]); t.scale.setScalar(s); t.rotation.y = i * 1.7; g.add(t);
+        put(t, trunkG, trunk, 0, 0.9, 0);
+        put(t, crowns[i % 3], i % 2 ? gA : gB, 0, 2.6, 0);
+        put(t, small, i % 2 ? gB : gA, 0.6, 2.3, 0.4);
+      });
+      register('arvores', g);
+    })();
+
+    // 10. Barco e carros
+    (function () {
+      var g = new THREE.Group();
+      var white = M('#F6F6F2', { roughness: 0.6 }), blue = M('#2A6FD1', { roughness: 0.6 }), glass = M('#9FD0F5', { roughness: 0.4 });
+      var boat = new THREE.Group(); boat.position.set(-5, 0.25, 14); boat.rotation.y = -0.12; g.add(boat);
+      var hull = [[-4.5, -1.5], [3, -1.5], [4.5, 0], [3, 1.5], [-4.5, 1.5]];
+      boat.add(slab(flatShape(hull), 0, 0.9, white));
+      boat.add(slab(flatShape(hull.map(function (p) { return [p[0] * 1.02, p[1] * 1.06]; })), 0.5, 0.18, blue));
+      put(boat, box(6, 1.3, 2.3), white, -0.8, 1.55, 0);
+      put(boat, box(6.4, 0.2, 2.6), white, -0.8, 2.3, 0);
+      var bw = box(0.55, 0.5, 0.06);
+      for (var i = 0; i < 6; i++) { [-1, 1].forEach(function (sd) { put(boat, bw, blue, -3.3 + i * 1.0, 1.65, sd * 1.17); }); }
+      function car(color, u, lane, flip) {
+        var body = M(color, { roughness: 0.55 }), tire = M('#151515');
+        var c = new THREE.Group(), p = roadCurve.getPointAt(u), t = roadCurve.getTangentAt(u);
+        c.position.set(p.x + t.z * lane, ROAD_Y, p.z - t.x * lane);
+        c.rotation.y = Math.atan2(-t.z, t.x) + (flip ? Math.PI : 0); g.add(c);
+        put(c, box(2.8, 0.7, 1.4), body, 0, 0.65, 0);
+        put(c, box(1.5, 0.6, 1.2), body, -0.15, 1.3, 0);
+        put(c, box(0.06, 0.42, 1.0), glass, 0.61, 1.3, 0);
+        [-1, 1].forEach(function (sd) { put(c, box(1.2, 0.36, 0.06), glass, -0.15, 1.32, sd * 0.61); });
+        var wg = new THREE.CylinderGeometry(0.32, 0.32, 0.25, 14);
+        [[-0.9, -0.7], [-0.9, 0.7], [0.9, -0.7], [0.9, 0.7]].forEach(function (w) { var m = put(c, wg, tire, w[0], 0.32, w[1]); m.rotation.x = Math.PI / 2; });
+      }
+      car('#D6282E', 0.2, 1.2, false);
+      car('#F2C230', 0.6, -1.2, true);
+      register('barco', g);
+    })();
+
+    // 11. Plaquinhas e letreiro
+    (function () {
+      var g = new THREE.Group(), blk = M('#141518');
+      function plaque(text, w, x, y, z, tilt) {
+        var face = M('#FFFFFF', { map: plaqueTex(text, w), roughness: 0.95 });
+        var m = put(g, box(w, 2, 0.25), [blk, blk, blk, blk, face, blk], x, y, z); m.rotation.x = -tilt;
+      }
+      plaque('Teatro Bolshoi', 8, -18, LAND_Y + 1.0, -2.9, 0.18);
+      plaque('Catedral de São Basílio', 11, 0, LAND_Y + 1.0, -3.0, 0.18);
+      plaque('Kremlin', 7, 18.5, LAND_Y + 1.0, -6.3, 0.18);
+      plaque('~ Rio Moscou ~', 8, -15, 1.25, 18.2, 0.2);
+      put(g, new THREE.PlaneGeometry(61.2, 5), M('#FFFFFF', { map: signTex(), roughness: 0.95 }), 0, 1.5, 20.605);
+      register('placas', g);
+    })();
+
+    /* =========================================================
+       Interação
+       ========================================================= */
+    var HL = new THREE.Color('#FFB547').convertSRGBToLinear();
+    var selected = 'geral', hovered = null, isolate = true, showPins = true;
+    var vw = 1, vh = 1;
+
+    function resize() {
+      vw = viewer.clientWidth; vh = viewer.clientHeight;
+      renderer.setSize(vw, vh, false);
+      camera.aspect = vw / Math.max(1, vh); camera.updateProjectionMatrix();
+    }
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(viewer); else window.addEventListener('resize', resize);
+    resize();
+
+    function overviewPose() {
+      var a = camera.aspect;
+      var D = Math.min(210, Math.max(80, 37 / (0.344 * a) + 22));
+      var target = new V3(0, 10, -1);
+      return { pos: target.clone().add(new V3(0.18, 0.62, 1).normalize().multiplyScalar(D)), target: target };
+    }
+    var anim = null;
+    function flyTo(pos, target, dur) {
+      if (reduceMotion) { camera.position.copy(pos); controls.target.copy(target); controls.update(); anim = null; return; }
+      anim = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos, t1: target, start: performance.now(), dur: dur || 900 };
+    }
+    controls.addEventListener('start', function () { anim = null; });
+    function focusPart(id) {
+      if (id === 'geral' || !partGroups[id]) { var o = overviewPose(); flyTo(o.pos, o.target); return; }
+      var bx = new THREE.Box3().setFromObject(partGroups[id]);
+      var c = bx.getCenter(new V3()), r = Math.max(bx.getSize(new V3()).length() / 2, 6);
+      var dir = new V3().fromArray(BY_ID[id].view || [0.35, 0.55, 1]).normalize();
+      var d = r / Math.sin(camera.fov * Math.PI / 360) * 1.1;
+      if (camera.aspect < 1) d /= Math.max(camera.aspect, 0.55);
+      d = Math.min(d, 210);
+      flyTo(c.clone().add(dir.multiplyScalar(d)), c);
+    }
+
+    function refreshMaterials() {
+      Object.keys(partMats).forEach(function (id) {
+        var faded = isolate && selected !== 'geral' && id !== selected;
+        partMats[id].forEach(function (m) {
+          var want = faded ? 0.14 : 1;
+          if (m.opacity !== want) { m.opacity = want; m.transparent = want < 1; m.depthWrite = want >= 1; m.needsUpdate = true; }
+        });
+      });
+    }
+    function applyEmissive(now) {
+      Object.keys(partMats).forEach(function (id) {
+        var ei = 0;
+        if (id === hovered) ei = 0.3;
+        else if (id === selected) ei = reduceMotion ? 0.12 : 0.06 + 0.08 * (0.5 + 0.5 * Math.sin(now * 0.004));
+        partMats[id].forEach(function (m) {
+          if (ei > 0) { m.emissive.copy(HL); m.emissiveIntensity = ei; }
+          else { m.emissive.copy(m.userData.e0); m.emissiveIntensity = m.userData.ei0; }
+        });
+      });
+    }
+
+    // Números das etapas sobre o modelo
+    var pinsEl = document.getElementById('pins');
+    var pins = PARTS.map(function (p, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'pin'; b.textContent = i + 1;
+      b.dataset.go = p.id; b.dataset.name = p.name;
+      b.setAttribute('aria-label', 'Etapa ' + (i + 1) + ': ' + p.name);
+      pinsEl.appendChild(b);
+      return { id: p.id, el: b, pos: new V3().fromArray(p.pin), vis: true };
+    });
+    pinsEl.addEventListener('click', function (e) { var b = e.target.closest('.pin'); if (b) go(b.dataset.go); });
+    pinsEl.addEventListener('pointerover', function (e) { var b = e.target.closest('.pin'); hovered = b ? b.dataset.go : null; });
+    pinsEl.addEventListener('pointerout', function () { hovered = null; });
+    function refreshPins() {
+      pins.forEach(function (p) {
+        p.el.classList.toggle('is-active', p.id === selected);
+        p.el.classList.toggle('is-done', isDone(BY_ID[p.id]));
+        p.el.classList.toggle('is-dim', isolate && selected !== 'geral' && p.id !== selected);
+      });
+    }
+    var pv = new V3();
+    function updatePins() {
+      if (!showPins) return;
+      for (var i = 0; i < pins.length; i++) {
+        var p = pins[i];
+        pv.copy(p.pos).project(camera);
+        var x = (pv.x * 0.5 + 0.5) * vw, y = (-pv.y * 0.5 + 0.5) * vh;
+        var vis = pv.z < 1 && x > -10 && x < vw + 10 && y > -10 && y < vh + 10;
+        if (vis !== p.vis) { p.el.hidden = !vis; p.vis = vis; }
+        if (vis) p.el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%)';
+      }
+    }
+
+    // Clique e passar o mouse nas peças
+    var raycaster = new THREE.Raycaster(), ndc = new THREE.Vector2();
+    var tooltip = document.getElementById('tooltip');
+    function pick(clientX, clientY) {
+      var r = canvas.getBoundingClientRect();
+      ndc.set(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
+      raycaster.setFromCamera(ndc, camera);
+      var hits = raycaster.intersectObjects(pickables, false);
+      return hits.length ? hits[0].object.userData.part : null;
+    }
+    var down = null;
+    canvas.addEventListener('pointerdown', function (e) { down = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+    canvas.addEventListener('pointerup', function (e) {
+      if (!down) return;
+      var moved = Math.hypot(e.clientX - down.x, e.clientY - down.y), dt = performance.now() - down.t;
+      down = null;
+      if (moved < 7 && dt < 700) { var id = pick(e.clientX, e.clientY); if (id) go(id); }
+    });
+    var hoverQueued = null;
+    canvas.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse' || e.buttons) { if (hovered && e.buttons) { hovered = null; tooltip.hidden = true; } return; }
+      hoverQueued = e;
+    });
+    canvas.addEventListener('pointerleave', function () { hovered = null; hoverQueued = null; tooltip.hidden = true; canvas.classList.remove('is-hot'); });
+    function processHover() {
+      if (!hoverQueued) return;
+      var e = hoverQueued; hoverQueued = null;
+      var id = pick(e.clientX, e.clientY);
+      hovered = id;
+      canvas.classList.toggle('is-hot', !!id);
+      if (id) {
+        var p = BY_ID[id], r = viewer.getBoundingClientRect();
+        tooltip.innerHTML = '<b>' + (p.i + 1) + ' · ' + p.name + '</b><span>Clique para ver o passo a passo</span>';
+        tooltip.hidden = false;
+        var x = e.clientX - r.left + 14, y = e.clientY - r.top + 14;
+        x = Math.min(x, vw - tooltip.offsetWidth - 8); y = Math.min(y, vh - tooltip.offsetHeight - 8);
+        tooltip.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      } else tooltip.hidden = true;
+    }
+
+    // Botões da barra
+    var btnRotate = document.getElementById('btnRotate'), btnPins = document.getElementById('btnPins'), btnIso = document.getElementById('btnIsolate');
+    document.getElementById('btnHome').addEventListener('click', function () { go('geral', { scroll: false }); });
+    btnRotate.addEventListener('click', function () {
+      controls.autoRotate = !controls.autoRotate; btnRotate.setAttribute('aria-pressed', String(controls.autoRotate));
+    });
+    btnPins.addEventListener('click', function () {
+      showPins = !showPins; pinsEl.hidden = !showPins; btnPins.setAttribute('aria-pressed', String(showPins));
+      if (showPins) { pins.forEach(function (p) { p.vis = !p.el.hidden; }); updatePins(); }
+    });
+    btnIso.addEventListener('click', function () {
+      isolate = !isolate; btnIso.setAttribute('aria-pressed', String(isolate)); refreshMaterials(); refreshPins();
+    });
+
+    // Abertura: a câmera chega girando até a visão geral
+    var o0 = overviewPose();
+    var startPos = o0.pos.clone().sub(o0.target).applyAxisAngle(new V3(0, 1, 0), -0.7).multiplyScalar(1.3).add(o0.target);
+    camera.position.copy(reduceMotion ? o0.pos : startPos);
+    controls.target.copy(o0.target);
+    controls.update();
+
+    function ease(k) { return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; }
+    function loop(now) {
+      requestAnimationFrame(loop);
+      if (anim) {
+        var k = Math.min(1, (now - anim.start) / anim.dur), e = ease(k);
+        camera.position.lerpVectors(anim.p0, anim.p1, e);
+        controls.target.lerpVectors(anim.t0, anim.t1, e);
+        if (k >= 1) anim = null;
+      }
+      controls.update();
+      if (!reduceMotion) { waterTex.offset.x += 0.00025; waterTex.offset.y += 0.0001; }
+      processHover();
+      applyEmissive(now);
+      renderer.render(scene, camera);
+      updatePins();
+    }
+    requestAnimationFrame(loop);
+
+    return {
+      select: function (id) {
+        selected = id; refreshMaterials(); refreshPins(); focusPart(id);
+      },
+      refreshPins: refreshPins,
+      intro: function () { var o = overviewPose(); if (selected === 'geral') flyTo(o.pos, o.target, 1600); }
+    };
+  }
+
+  var loading = document.getElementById('loading');
+  fontsReady().then(function () {
+    try {
+      sceneApi = initScene();
+      var first = current;
+      sceneApi.select(first);
+      if (first === 'geral') sceneApi.intro();
+      loading.hidden = true;
+    } catch (err) {
+      loading.classList.add('is-error');
+      document.getElementById('loadingText').innerHTML = 'Não foi possível abrir o 3D neste aparelho.<p>O passo a passo completo continua funcionando aqui ao lado.</p>';
+      document.getElementById('hint').hidden = true;
+      document.querySelector('.toolbar').hidden = true;
+    }
+  });
+})();
+</script>
